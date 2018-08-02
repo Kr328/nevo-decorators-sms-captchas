@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Nevo · 短信验证码通知增强</string>
+    <string name="main_service_name">短信验证码通知增强</string>
+    <string name="main_service_description">用于短信验证码复制和锁屏隐藏验证码.</string>
+    <string name="main_service_notification_channel_name">包含验证码的消息</string>
+    <string name="main_service_notification_unlocked_action_copy_code_format">复制 %s</string>
+    <string name="main_service_notification_locked_action_copy_code">复制验证码</string>
+    <string name="main_service_toast_copied_format">%s 已复制到剪贴板</string>
+</resources>
