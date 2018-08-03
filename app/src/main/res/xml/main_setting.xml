@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/setting_notification_enhance"
+        android:key="title_notification_enhance">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="setting_plugin_enabled"
+            android:summary="@string/setting_plugin_enabled_summary"
+            android:title="@string/setting_plugin_enabled_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="setting_captcha_hide_on_locked"
+            android:summary="@string/setting_captcha_hide_on_locked_summary"
+            android:title="@string/setting_captcha_hide_on_locked_title" />
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:key="setting_captcha_check_pattern"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/setting_captcha_check_pattern_summary"
+            android:title="@string/setting_captcha_check_pattern_title" />
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:key="setting_captcha_parse_pattern"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/setting_captcha_parse_pattern_summary"
+            android:title="@string/setting_captcha_parse_pattern_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/setting_other">
+        <CheckBoxPreference
+            android:title="@string/setting_hide_in_launcher_title"
+            android:summary="@string/setting_hide_in_launcher_summary"
+            android:key="setting_hide_in_launcher"/>
+    </PreferenceCategory>
+</PreferenceScreen>

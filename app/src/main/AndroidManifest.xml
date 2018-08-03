@@ -8,14 +8,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
+        android:theme="@style/app_theme">
         <service
-            android:name=".SmsCaptchaDecoratorService"
+            android:name=".MainDecoratorService"
             android:description="@string/main_service_description"
             android:label="@string/main_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
             android:process="com.oasisfeng.nevo.decorators">
-            <intent-filter android:priority="5">
+            <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />
             </intent-filter>
 
@@ -24,8 +24,31 @@
                 android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms" />
             <meta-data
                 android:name="settings.receiver"
-                android:value="ScreenshotDecoratorSettingsReceiver" />
+                android:value="SettingsReceiver" />
         </service>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
+        </activity>
+
+        <activity-alias
+            android:name=".MainActivity"
+            android:targetActivity=".SettingsActivity"
+            android:enabled="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <receiver
+            android:name=".SettingsReceiver"
+            android:exported="true"
+            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            />
     </application>
 
 </manifest>
