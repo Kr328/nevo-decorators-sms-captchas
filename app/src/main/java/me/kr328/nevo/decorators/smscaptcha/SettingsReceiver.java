@@ -7,6 +7,6 @@ import android.content.Intent;
 public class SettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startActivity(new Intent(context ,SettingsActivity.class));
+        context.startActivity(new Intent(context, SettingsActivity.class));
     }
 }

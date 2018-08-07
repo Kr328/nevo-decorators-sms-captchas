@@ -48,14 +48,13 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask">
-        </activity>
+            android:launchMode="singleTask"></activity>
 
         <activity-alias
             android:name=".MainActivity"
-            android:targetActivity=".SettingsActivity"
             android:enabled="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:targetActivity=".SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -65,8 +64,7 @@
         <receiver
             android:name=".SettingsReceiver"
             android:exported="true"
-            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
-            />
+            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE" />
     </application>
 
 </manifest>

@@ -8,16 +8,17 @@ public class PatternUtils {
     public static boolean checkPatternValid(String pattern) {
         try {
             Pattern.compile(pattern);
-        }
-        catch ( PatternSyntaxException e) {
+        } catch (PatternSyntaxException e) {
             return false;
         }
         return true;
     }
 
-    public static Pattern compilePattern(String pattern , String def) {
-        try { return Pattern.compile(pattern); }
-        catch ( PatternSyntaxException ignored) {}
+    public static Pattern compilePattern(String pattern, String def) {
+        try {
+            return Pattern.compile(pattern);
+        } catch (PatternSyntaxException ignored) {
+        }
         return Pattern.compile(def);
     }
 }

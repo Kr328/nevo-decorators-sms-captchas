@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/setting_captcha">
+    <PreferenceCategory android:title="@string/setting_captcha">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="setting_captcha_hide_on_locked"
@@ -22,8 +21,7 @@
             android:summary="@string/setting_captcha_parse_pattern_summary"
             android:title="@string/setting_captcha_parse_pattern_title" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/setting_subscribe">
+    <PreferenceCategory android:title="@string/setting_subscribe">
         <EditTextPreference
             android:defaultValue="@string/default_value_identify_subscribe_pattern"
             android:key="setting_subscribe_identify_pattern"
@@ -41,8 +39,8 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_other">
         <CheckBoxPreference
-            android:title="@string/setting_hide_in_launcher_title"
+            android:key="setting_hide_in_launcher"
             android:summary="@string/setting_hide_in_launcher_summary"
-            android:key="setting_hide_in_launcher"/>
+            android:title="@string/setting_hide_in_launcher_title" />
     </PreferenceCategory>
 </PreferenceScreen>
