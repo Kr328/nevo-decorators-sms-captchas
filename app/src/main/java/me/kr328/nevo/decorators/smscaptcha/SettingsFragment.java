@@ -1,14 +1,15 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -26,73 +27,75 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.main_setting);
         getPreferenceScreen().setEnabled(false);
-        getPreferenceScreen().setIconSpaceReserved(false);
 
-        mPluginEnabled       = (CheckBoxPreference) findPreference(Settings.SETTING_PLUGIN_ENABLED);
-        mHideOnLocked        = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
-        mCheckCaptchaPattern = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_CHECK_PATTERN);
-        mParseCaptchaPattern = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
-        mHideInLauncher      = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
+        mCaptchaHideOnLocked      = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
+        mCaptchaIdentifyPattern   = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
+        mCaptchaParsePattern      = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
+        mSubscribeIdentityPattern = (EditTextPreference) findPreference(Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN);
+        mSubscribePriority        = (ListPreference)     findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
+        mHideInLauncher           = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
 
-        mPluginEnabled.setOnPreferenceChangeListener(this::onPreferenceChange);
-        mHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
-        mCheckCaptchaPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
-        mParseCaptchaPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mCaptchaIdentifyPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mCaptchaParsePattern.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mSubscribeIdentityPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mSubscribePriority.setOnPreferenceChangeListener(this::onPreferenceChange);
 
         new Thread(this::loadSettingsAndUpdateViews).start();
     }
 
-    private boolean onPreferenceChange(Preference preference, Object o) {
+    private boolean onPreferenceChange(Preference preference , Object value) {
         String key = preference.getKey();
 
-        switch ( key ) {
-            case Settings.SETTING_PLUGIN_ENABLED :
-                mSettings.pluginEnabled = (boolean) o;
-                mAppPreferences.put(key ,mSettings.pluginEnabled);
-                break;
+        switch (key) {
             case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED :
-                mSettings.captchaHideOnLocked = (boolean) o;
-                mAppPreferences.put(key ,mSettings.captchaHideOnLocked);
+                mSettings.setCaptchaHideOnLocked((Boolean) value);
+                mAppPreferences.put(key , (Boolean) value);
                 break;
-            case Settings.SETTING_CAPTCHA_CHECK_PATTERN :
-                mSettings.captchaCheckPattern = (String) o;
-                mAppPreferences.put(key ,mSettings.captchaCheckPattern);
-                if ( !PatternUtils.checkPatternValid((String) o) ) {
-                    Toast.makeText(getActivity() ,R.string.setting_pattern_invalid ,Toast.LENGTH_LONG).show();
-                    return false;
-                }
+            case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN :
+                if (!PatternUtils.checkPatternValid((String) value)) return false;
+                mSettings.setCaptchaIdentifyPattern((String) value);
+                mAppPreferences.put(key , (String) value);
                 break;
             case Settings.SETTING_CAPTCHA_PARSE_PATTERN :
-                mSettings.captchaParsePattern = (String) o;
-                mAppPreferences.put(key ,mSettings.captchaParsePattern);
-                if ( !PatternUtils.checkPatternValid((String) o) ) {
-                    Toast.makeText(getActivity() ,R.string.setting_pattern_invalid ,Toast.LENGTH_LONG).show();
-                    return false;
-                }
+                if (!PatternUtils.checkPatternValid((String) value)) return false;
+                mSettings.setCaptchaParsePattern((String) value);
+                mAppPreferences.put(key , (String) value);
                 break;
-            case KEY_HIDE_IN_LAUNCHER:
-                new Thread(() -> updateMainActivityEnabled(! (Boolean) o)).start();
+            case Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN :
+                if (!PatternUtils.checkPatternValid((String) value)) return false;
+                mSettings.setSubscribeIdentifyPattern((String) value);
+                mAppPreferences.put(key , (String) value);
+                break;
+            case Settings.SETTING_SUBSCRIBE_PRIORITY :
+                int valueInteger = Integer.parseInt((String) value);
+                mSettings.setSubscribePriority(valueInteger);
+                mAppPreferences.put(key , valueInteger);
+                break;
+            case KEY_HIDE_IN_LAUNCHER :
+                new Thread(() -> updateMainActivityEnabled((Boolean) value)).start();
                 break;
         }
-
-        Log.i(TAG ,"Updating " + key);
 
         return true;
     }
 
     private void loadSettingsAndUpdateViews() {
         mAppPreferences = new AppPreferences(Objects.requireNonNull(getActivity()));
-        mSettings = new Settings(true ,true ,getString(R.string.default_value_check_captcha_pattern) ,getString(R.string.default_value_parse_captcha_pattern))
-                .readFromTrayPreference(mAppPreferences);
+        mSettings = Settings.defaultValueFromContext(getActivity()).readFromTrayPreference(mAppPreferences);
         getActivity().runOnUiThread(this::updateViews);
+
+        boolean isActivityHidden = getActivity().getPackageManager().getComponentEnabledSetting(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".MainActivity")) == PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        getActivity().runOnUiThread(() -> mHideInLauncher.setChecked(isActivityHidden));
     }
 
     private void updateViews() {
-        mPluginEnabled.setChecked(mSettings.pluginEnabled);
-        mHideOnLocked.setChecked(mSettings.captchaHideOnLocked);
-        mCheckCaptchaPattern.setText(mSettings.captchaCheckPattern);
-        mParseCaptchaPattern.setText(mSettings.captchaParsePattern);
+        mCaptchaHideOnLocked.setChecked(mSettings.isCaptchaHideOnLocked());
+        mCaptchaIdentifyPattern.setText(mSettings.getCaptchaIdentifyPattern());
+        mCaptchaParsePattern.setText(mSettings.getCaptchaParsePattern());
+        mSubscribeIdentityPattern.setText(mSettings.getSubscribeIdentifyPattern());
+        mSubscribePriority.setValue(String.valueOf(mSettings.getSubscribePriority()));
 
         getPreferenceScreen().setEnabled(true);
     }
@@ -105,10 +108,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         PackageManager.DONT_KILL_APP);
     }
 
-    private CheckBoxPreference mPluginEnabled;
-    private CheckBoxPreference mHideOnLocked;
-    private EditTextPreference mCheckCaptchaPattern;
-    private EditTextPreference mParseCaptchaPattern;
+    private CheckBoxPreference mCaptchaHideOnLocked;
+    private EditTextPreference mCaptchaIdentifyPattern;
+    private EditTextPreference mCaptchaParsePattern;
+    private EditTextPreference mSubscribeIdentityPattern;
+    private ListPreference     mSubscribePriority;
     private CheckBoxPreference mHideInLauncher;
 
     private AppPreferences mAppPreferences;

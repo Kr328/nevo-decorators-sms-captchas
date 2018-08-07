@@ -18,7 +18,7 @@ public class CaptchaUtils {
 
         message = message.toString().toLowerCase();
 
-        if ( !mCheckPattern.matcher(message).find() )
+        if ( !mCheckPattern.matcher(message).matches() )
             return new String[0];
 
         ArrayList<String> captchas = new ArrayList<>();

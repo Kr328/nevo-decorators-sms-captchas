@@ -10,9 +10,27 @@
         android:supportsRtl="true"
         android:theme="@style/app_theme">
         <service
-            android:name=".MainDecoratorService"
-            android:description="@string/main_service_description"
-            android:label="@string/main_service_name"
+            android:name=".CaptchaDecoratorService"
+            android:description="@string/captcha_service_description"
+            android:label="@string/captcha_service_name"
+            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            android:process="com.oasisfeng.nevo.decorators">
+            <intent-filter android:priority="6">
+                <action android:name="com.oasisfeng.nevo.Decorator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="packages"
+                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms" />
+            <meta-data
+                android:name="settings.receiver"
+                android:value="SettingsReceiver" />
+        </service>
+
+        <service
+            android:name=".SubscribeDecoratorService"
+            android:description="@string/subscribe_service_description"
+            android:label="@string/subscribe_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">

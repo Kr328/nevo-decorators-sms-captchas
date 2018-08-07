@@ -1,71 +1,86 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
+import android.content.Context;
+
 import net.grandcentrix.tray.TrayPreferences;
 
 public class Settings {
-    public final static String SETTING_PLUGIN_ENABLED                  = "setting_plugin_enabled";
     public final static String SETTING_CAPTCHA_HIDE_ON_LOCKED          = "setting_captcha_hide_on_locked";
-    public final static String SETTING_CAPTCHA_CHECK_PATTERN           = "setting_captcha_check_pattern";
+    public final static String SETTING_CAPTCHA_IDENTIFY_PATTERN        = "setting_captcha_identify_pattern";
     public final static String SETTING_CAPTCHA_PARSE_PATTERN           = "setting_captcha_parse_pattern";
+    public final static String SETTING_SUBSCRIBE_IDENTIFY_PATTERN      = "setting_subscribe_identify_pattern";
+    public final static String SETTING_SUBSCRIBE_PRIORITY              = "setting_subscribe_priority";
 
-    public boolean pluginEnabled;
-    public boolean captchaHideOnLocked;
-    public String  captchaCheckPattern;
-    public String  captchaParsePattern;
+    private boolean captchaHideOnLocked;
+    private String  captchaIdentifyPattern;
+    private String  captchaParsePattern;
+    private String  subscribeIdentifyPattern;
+    private int     subscribePriority;
 
     public Settings readFromTrayPreference(TrayPreferences preferences) {
-        pluginEnabled       = preferences.getBoolean(SETTING_PLUGIN_ENABLED         ,pluginEnabled);
-        captchaHideOnLocked = preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED ,captchaHideOnLocked);
-        captchaCheckPattern = preferences.getString(SETTING_CAPTCHA_CHECK_PATTERN   ,captchaCheckPattern);
-        captchaParsePattern = preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN   ,captchaParsePattern);
+        setCaptchaHideOnLocked(preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED , isCaptchaHideOnLocked()));
+        setCaptchaIdentifyPattern(preferences.getString(SETTING_CAPTCHA_IDENTIFY_PATTERN, getCaptchaIdentifyPattern()));
+        setCaptchaParsePattern(preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN   , getCaptchaParsePattern()));
+        setSubscribeIdentifyPattern(preferences.getString(SETTING_SUBSCRIBE_IDENTIFY_PATTERN ,getSubscribeIdentifyPattern()));
+        setSubscribePriority(preferences.getInt(SETTING_SUBSCRIBE_PRIORITY ,getSubscribePriority()));
 
         return this;
     }
 
-    public Settings readFromTrayPreference(TrayPreferences preferences ,String key) {
-        switch ( key ) {
-            case Settings.SETTING_PLUGIN_ENABLED :
-                pluginEnabled = preferences.getBoolean(key ,pluginEnabled);
-                break;
-            case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED :
-                captchaHideOnLocked = preferences.getBoolean(key ,captchaHideOnLocked);
-                break;
-            case Settings.SETTING_CAPTCHA_CHECK_PATTERN :
-                captchaCheckPattern = preferences.getString(key ,captchaCheckPattern);
-                break;
-            case Settings.SETTING_CAPTCHA_PARSE_PATTERN :
-                captchaParsePattern = preferences.getString(key ,captchaParsePattern);
-                break;
-        }
-
-        return this;
+    public static Settings defaultValueFromContext(Context context) {
+        return new Settings(true ,
+                context.getString(R.string.default_value_identify_captcha_pattern) ,
+                context.getString(R.string.default_value_parse_captcha_pattern) ,
+                context.getString(R.string.default_value_identify_subscribe_pattern) ,
+                -2);
     }
 
-    public Settings writeToTrayPreference(TrayPreferences preferences) {
-        preferences.put(SETTING_PLUGIN_ENABLED         ,pluginEnabled);
-        preferences.put(SETTING_CAPTCHA_HIDE_ON_LOCKED ,captchaHideOnLocked);
-        preferences.put(SETTING_CAPTCHA_CHECK_PATTERN  ,captchaCheckPattern);
-        preferences.put(SETTING_CAPTCHA_PARSE_PATTERN  ,captchaParsePattern);
-
-        return this;
+    public Settings(boolean captchaHideOnLocked , String captchaIdentifyPattern, String captchaParsePattern ,String subscribeIdentifyPattern ,int subscribePriority) {
+        this.setCaptchaHideOnLocked(captchaHideOnLocked);
+        this.setCaptchaIdentifyPattern(captchaIdentifyPattern);
+        this.setCaptchaParsePattern(captchaParsePattern);
+        this.setSubscribeIdentifyPattern(subscribeIdentifyPattern);
+        this.setSubscribePriority(subscribePriority);
     }
 
-    @Override
-    public String toString() {
-        return  " PluginEnabled=" + pluginEnabled       +
-                " HideOnLocked="  + captchaHideOnLocked +
-                " CheckPattern="  + captchaCheckPattern +
-                " ParsePattern="  + captchaParsePattern ;
+
+    public boolean isCaptchaHideOnLocked() {
+        return captchaHideOnLocked;
     }
 
-    public Settings() {
-        this(true ,true ,"" ,"");
-    }
-
-    public Settings(boolean pluginEnabled ,boolean captchaHideOnLocked ,String captchaCheckPattern ,String captchaParsePattern) {
-        this.pluginEnabled       = pluginEnabled;
+    public void setCaptchaHideOnLocked(boolean captchaHideOnLocked) {
         this.captchaHideOnLocked = captchaHideOnLocked;
-        this.captchaCheckPattern = captchaCheckPattern;
+    }
+
+    public String getCaptchaIdentifyPattern() {
+        return captchaIdentifyPattern;
+    }
+
+    public void setCaptchaIdentifyPattern(String captchaIdentifyPattern) {
+        this.captchaIdentifyPattern = captchaIdentifyPattern;
+    }
+
+    public String getCaptchaParsePattern() {
+        return captchaParsePattern;
+    }
+
+    public void setCaptchaParsePattern(String captchaParsePattern) {
         this.captchaParsePattern = captchaParsePattern;
+    }
+
+    public String getSubscribeIdentifyPattern() {
+        return subscribeIdentifyPattern;
+    }
+
+    public void setSubscribeIdentifyPattern(String subscribeIdentifyPattern) {
+        this.subscribeIdentifyPattern = subscribeIdentifyPattern;
+    }
+
+    public int getSubscribePriority() {
+        return subscribePriority;
+    }
+
+    public void setSubscribePriority(int subscribePriority) {
+        this.subscribePriority = subscribePriority;
     }
 }
