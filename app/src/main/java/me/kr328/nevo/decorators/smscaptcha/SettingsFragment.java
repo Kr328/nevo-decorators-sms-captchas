@@ -80,7 +80,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 mAppPreferences.put(key, valueInteger);
                 break;
             case KEY_HIDE_IN_LAUNCHER:
-                new Thread(() -> updateMainActivityEnabled((Boolean) value)).start();
+                new Thread(() -> updateMainActivityEnabled(!(Boolean)value)).start();
                 break;
         }
 
