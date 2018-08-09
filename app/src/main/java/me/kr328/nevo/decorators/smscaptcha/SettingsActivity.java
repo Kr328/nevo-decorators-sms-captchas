@@ -1,8 +1,10 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -19,10 +21,15 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_layout);
 
-        getSupportFragmentManager().beginTransaction().
-                replace(android.R.id.content, new SettingsFragment()).
-                commit();
+        setupWindowsOreo();
     }
 
+    private void setupWindowsOreo() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary ,getTheme()));
+    }
 }
