@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -102,9 +103,7 @@ public class CaptchaDecoratorService extends NevoDecoratorService {
         Log.i(TAG, "Applied " + evolving.getKey());
     }
 
-    private void applyKeyguardLocked(Notification notification, String key, CharSequence message, String[] captchas) {
-        message = CaptchaUtils.replaceCaptchaWithChar(message.toString(), captchas, '*');
-
+    private void applyKeyguardLocked(Notification notification, String key, CharSequence text, String[] captchas) {
         Notification.Action[] actions = new Notification.Action[1];
         String captcha = captchas[0];
         Icon icon = Icon.createWithResource(this, R.drawable.ic_notification_action_copy);
@@ -112,9 +111,26 @@ public class CaptchaDecoratorService extends NevoDecoratorService {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, key.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         actions[0] = new Notification.Action.Builder(icon, getString(R.string.captcha_service_notification_locked_action_copy_code), pendingIntent).build();
 
+        NotificationCompat.MessagingStyle originalStyle = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
+        NotificationCompat.MessagingStyle appliedStyle  = null;
+        if ( originalStyle != null ) {
+            appliedStyle = new NotificationCompat.MessagingStyle(originalStyle.getUser());
+            appliedStyle.setConversationTitle(originalStyle.getConversationTitle());
+            appliedStyle.setGroupConversation(originalStyle.isGroupConversation());
+
+            for ( NotificationCompat.MessagingStyle.Message message : originalStyle.getMessages() )
+                appliedStyle.addMessage(CaptchaUtils.replaceCaptchaWithChar(message.getText(), captchas, '*') ,message.getTimestamp() ,message.getPerson());
+
+            appliedStyle.addCompatExtras(notification.extras);
+        }
+        else {
+            notification.extras.remove(Notification.EXTRA_TEMPLATE);
+            notification.extras.putCharSequence(Notification.EXTRA_TEXT, CaptchaUtils.replaceCaptchaWithChar(text ,captchas ,'*'));
+        }
+
         notification.actions = actions;
-        notification.extras.remove(Notification.EXTRA_TEMPLATE);
-        notification.extras.putCharSequence(Notification.EXTRA_TEXT, message);
+
+        Log.i(TAG , "originalStyle == null: " + String.valueOf(originalStyle == null));
     }
 
     private void applyKeyguardUnlocked(Notification notification, String key, CharSequence message, String[] captchas) {
@@ -130,7 +146,6 @@ public class CaptchaDecoratorService extends NevoDecoratorService {
         }
 
         notification.actions = actions;
-        notification.extras.remove(Notification.EXTRA_TEMPLATE);
     }
 
     private void loadSettings() {

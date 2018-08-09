@@ -13,10 +13,12 @@ public class CaptchaUtils {
         mParsePattern = parsePattern;
     }
 
-    public static String replaceCaptchaWithChar(String message, String[] captchas, char ch) {
+    public static String replaceCaptchaWithChar(CharSequence message, String[] captchas, char ch) {
+        String messageString = message.toString();
+
         for (String captcha : captchas)
-            message = message.replace(captcha, StringUtils.repeat(ch, captcha.length()));
-        return message;
+            messageString = messageString.replace(captcha, StringUtils.repeat(ch, captcha.length()));
+        return messageString;
     }
 
     public String[] findSmsCaptchas(CharSequence message) {
