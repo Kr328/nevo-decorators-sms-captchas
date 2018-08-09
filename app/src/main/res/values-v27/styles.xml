@@ -1,0 +1,6 @@
+    <style name="app_theme" parent="Theme.AppCompat.Light">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:navigationBarDividerColor">@color/navigation_bar_divider</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
