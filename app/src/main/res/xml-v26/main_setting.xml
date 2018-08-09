@@ -31,10 +31,11 @@
             android:title="@string/setting_subscribe_identify_pattern" />
         <ListPreference
             android:defaultValue="-2"
+            android:enabled="false"
             android:entries="@array/setting_subscribe_priorities"
             android:entryValues="@array/settings_subscribe_priority_values"
             android:key="setting_subscribe_priority"
-            android:summary="@string/setting_subscribe_priority_summary"
+            android:summary="@string/setting_subscribe_priority_summary_v26"
             android:title="@string/setting_subscribe_priority" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_other">
