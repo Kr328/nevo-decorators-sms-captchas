@@ -29,9 +29,8 @@
             android:singleLine="true"
             android:summary="@string/setting_subscribe_identify_pattern_summary"
             android:title="@string/setting_subscribe_identify_pattern" />
-        <ListPreference
+        <Preference
             android:defaultValue="-2"
-            android:enabled="false"
             android:entries="@array/setting_subscribe_priorities"
             android:entryValues="@array/settings_subscribe_priority_values"
             android:key="setting_subscribe_priority"

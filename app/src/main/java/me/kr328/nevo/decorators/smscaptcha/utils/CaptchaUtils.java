@@ -33,7 +33,7 @@ public class CaptchaUtils {
         Matcher matcher = mParsePattern.matcher(message);
 
         while (matcher.find())
-            captchas.add(matcher.group(1));
+            captchas.add(matcher.group(0));
 
         return captchas.toArray(new String[0]);
     }

@@ -103,7 +103,7 @@ public class SubscribeDecoratorService extends NevoDecoratorService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return;
 
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT, getString(R.string.captcha_service_notification_channel_name), NotificationManager.IMPORTANCE_MIN);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT, getString(R.string.subscribe_service_notification_channel_name), NotificationManager.IMPORTANCE_MIN);
 
         ArrayList<NotificationChannel> notificationChannels = new ArrayList<>();
         notificationChannels.add(channel);
