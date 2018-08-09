@@ -133,7 +133,7 @@ public class CaptchaDecoratorService extends NevoDecoratorService {
         Log.i(TAG , "originalStyle == null: " + String.valueOf(originalStyle == null));
     }
 
-    private void applyKeyguardUnlocked(Notification notification, String key, CharSequence message, String[] captchas) {
+    private void applyKeyguardUnlocked(Notification notification, String key, CharSequence text, String[] captchas) {
         Notification.Action[] actions = new Notification.Action[captchas.length];
 
         for (int i = 0; i < captchas.length; i++) {
@@ -143,6 +143,15 @@ public class CaptchaDecoratorService extends NevoDecoratorService {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (key + i).hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             actions[i] = new Notification.Action.Builder(icon, getString(R.string.captcha_service_notification_unlocked_action_copy_code_format, captcha), pendingIntent).build();
+        }
+
+        NotificationCompat.MessagingStyle style = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
+        if ( style != null ) {
+            style.addCompatExtras(notification.extras);
+        }
+        else {
+            notification.extras.remove(Notification.EXTRA_TEMPLATE);
+            notification.extras.putCharSequence(Notification.EXTRA_TEXT, CaptchaUtils.replaceCaptchaWithChar(text ,captchas ,'*'));
         }
 
         notification.actions = actions;
