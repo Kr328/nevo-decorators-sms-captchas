@@ -23,10 +23,10 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        setupWindowsOreo();
+        setupWindowOreo();
     }
 
-    private void setupWindowsOreo() {
+    private void setupWindowOreo() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);

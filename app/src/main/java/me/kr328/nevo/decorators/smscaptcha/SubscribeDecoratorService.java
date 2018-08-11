@@ -22,7 +22,7 @@ import net.grandcentrix.tray.core.TrayItem;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SubscribeDecoratorService extends NevoDecoratorService {
+public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
     public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms"};
 
