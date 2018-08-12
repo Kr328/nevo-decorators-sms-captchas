@@ -1,7 +1,9 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
@@ -19,27 +21,29 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
+    public final static String NEVOLUTION_PACKAGE_NAME = "com.oasisfeng.nevo";
+
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
     private CheckBoxPreference mCaptchaHideOnLocked;
     private EditTextPreference mCaptchaIdentifyPattern;
     private EditTextPreference mCaptchaParsePattern;
     private EditTextPreference mSubscribeIdentityPattern;
-    private ListPreference mSubscribePriority;
+    private Preference         mSubscribePriority;
     private CheckBoxPreference mHideInLauncher;
-    private AppPreferences mAppPreferences;
-    private Settings mSettings;
+    private AppPreferences     mAppPreferences;
+    private Settings           mSettings;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.main_setting);
         getPreferenceScreen().setEnabled(false);
 
-        mCaptchaHideOnLocked = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
-        mCaptchaIdentifyPattern = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
-        mCaptchaParsePattern = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
+        mCaptchaHideOnLocked      = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
+        mCaptchaIdentifyPattern   = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
+        mCaptchaParsePattern      = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
         mSubscribeIdentityPattern = (EditTextPreference) findPreference(Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN);
-        mSubscribePriority = (ListPreference) findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
-        mHideInLauncher = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
+        mSubscribePriority        = findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
+        mHideInLauncher           = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
 
         mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaIdentifyPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
@@ -47,6 +51,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mSubscribeIdentityPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
         mSubscribePriority.setOnPreferenceChangeListener(this::onPreferenceChange);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            mSubscribePriority.setOnPreferenceClickListener((Preference p) -> {
+                startActivity(
+                        new Intent("android.settings.APP_NOTIFICATION_SETTINGS").
+                                putExtra("android.provider.extra.APP_PACKAGE" ,NEVOLUTION_PACKAGE_NAME));
+                return false;
+            });
+        }
 
         new Thread(this::loadSettingsAndUpdateViews).start();
     }
@@ -101,7 +114,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mCaptchaIdentifyPattern.setText(mSettings.getCaptchaIdentifyPattern());
         mCaptchaParsePattern.setText(mSettings.getCaptchaParsePattern());
         mSubscribeIdentityPattern.setText(mSettings.getSubscribeIdentifyPattern());
-        mSubscribePriority.setValue(String.valueOf(mSettings.getSubscribePriority()));
+
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O )
+            ((ListPreference)mSubscribePriority).setValue(String.valueOf(mSettings.getSubscribePriority()));
 
         getPreferenceScreen().setEnabled(true);
     }

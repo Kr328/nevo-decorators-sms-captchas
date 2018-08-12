@@ -22,7 +22,7 @@ import net.grandcentrix.tray.core.TrayItem;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SubscribeDecoratorService extends NevoDecoratorService {
+public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
     public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms"};
 
@@ -103,7 +103,7 @@ public class SubscribeDecoratorService extends NevoDecoratorService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return;
 
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT, getString(R.string.captcha_service_notification_channel_name), NotificationManager.IMPORTANCE_MIN);
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT, getString(R.string.subscribe_service_notification_channel_name), NotificationManager.IMPORTANCE_MIN);
 
         ArrayList<NotificationChannel> notificationChannels = new ArrayList<>();
         notificationChannels.add(channel);
