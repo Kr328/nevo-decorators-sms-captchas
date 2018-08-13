@@ -21,8 +21,6 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
-    public final static String NEVOLUTION_PACKAGE_NAME = "com.oasisfeng.nevo";
-
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
     private CheckBoxPreference mCaptchaHideOnLocked;
     private EditTextPreference mCaptchaIdentifyPattern;
@@ -56,7 +54,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mSubscribePriority.setOnPreferenceClickListener((Preference p) -> {
                 startActivity(
                         new Intent("android.settings.APP_NOTIFICATION_SETTINGS").
-                                putExtra("android.provider.extra.APP_PACKAGE" ,NEVOLUTION_PACKAGE_NAME));
+                                putExtra("android.provider.extra.APP_PACKAGE" , Global.NEVOLUTION_PACKAGE_NAME));
                 return false;
             });
         }

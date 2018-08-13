@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import me.kr328.nevo.decorators.smscaptcha.utils.CaptchaUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
@@ -57,11 +59,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     @Override
     protected void apply(MutableStatusBarNotification evolving) {
-        MutableNotification notification = evolving.getNotification();
-        Bundle              extras       = notification.extras;
-        boolean             recast       = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false);
-        CharSequence        message      = extras.getCharSequence(Notification.EXTRA_TEXT);
-        String[]            captchas     = mCaptchaUtils.findSmsCaptchas(message);
+        MutableNotification notification    = evolving.getNotification();
+        Bundle              extras          = notification.extras;
+        boolean             recast          = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false);
+        NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
+        String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.text);
 
         if (captchas.length == 0 || extras.getBoolean(Global.NOTIFICATION_EXTRA_APPLIED, false))
             return;
@@ -73,11 +75,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         if (mSettings.isCaptchaHideOnLocked() && keyguardManager != null && keyguardManager.isKeyguardLocked())
-            applyKeyguardLocked(notification, evolving.getKey(), message, captchas);
+            applyKeyguardLocked(notification, evolving.getKey(), messages, captchas);
         else
-            applyKeyguardUnlocked(notification, evolving.getKey(), message, captchas);
+            applyKeyguardUnlocked(notification, evolving.getKey(), messages, captchas);
 
-        notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+        notification.flags     |= Notification.FLAG_ONLY_ALERT_ONCE;
         notification.visibility = Notification.VISIBILITY_PUBLIC;
 
         extras.putBoolean(Global.NOTIFICATION_EXTRA_APPLIED, true);
@@ -86,24 +88,30 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         Log.i(TAG, "Applied " + evolving.getKey());
     }
 
-    private void applyKeyguardLocked(Notification notification, String key, CharSequence message ,String[] captchas) {
+    private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages , String[] captchas) {
         Notification.Action[] actions = new Notification.Action[] {
-                createNonIconAction(key ,getString(R.string.captcha_service_notification_locked_action_copy_code) ,(intent -> copyCaptcha(captchas[0])))
+                createNonIconAction(key ,getString(R.string.captcha_service_notification_locked_action_copy_code) ,(intent -> onCopyActionClicked(captchas[0] ,messages ,mSettings.getCaptchaPostCopyAction())))
         };
 
         NotificationUtils.replaceMessages(notification ,text -> CaptchaUtils.replaceCaptchaWithChar(text ,captchas ,'*'));
 
-        replaceActions(notification ,key ,actions);
+        if ( mSettings.isCaptchaOverrideDefaultAction() )
+            replaceActions(notification ,key ,actions);
+        else
+            appendActions(notification ,key ,actions);
     }
 
-    private void applyKeyguardUnlocked(Notification notification, String key, CharSequence text, String[] captchas) {
+    private void applyKeyguardUnlocked(Notification notification, String key, NotificationUtils.Messages messages, String[] captchas) {
         Notification.Action[] actions = Arrays.stream(captchas).
-                map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,intent->copyCaptcha(captcha))).
+                map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,intent -> onCopyActionClicked(captcha ,messages ,mSettings.getCaptchaPostCopyAction()))).
                 toArray(Notification.Action[]::new);
 
         NotificationUtils.rebuildMessageStyle(notification);
 
-        replaceActions(notification ,key ,actions);
+        if ( mSettings.isCaptchaOverrideDefaultAction() )
+            replaceActions(notification ,key ,actions);
+        else
+            appendActions(notification ,key ,actions);
     }
 
     private void loadSettings() {
@@ -129,8 +137,8 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     private void initCaptchaUtils() {
         mCaptchaUtils = new CaptchaUtils(
-                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), getString(R.string.default_value_identify_captcha_pattern)),
-                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), getString(R.string.default_value_parse_captcha_pattern)));
+                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), getString(R.string.default_value_identify_captcha_pattern) ,Pattern.CASE_INSENSITIVE),
+                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), getString(R.string.default_value_parse_captcha_pattern) ,Pattern.CASE_INSENSITIVE));
     }
 
     private void recastAllNotifications(Bundle fillInExtras) {
@@ -139,7 +147,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         mAppliedKeys.clear();
     }
 
-    private void copyCaptcha(String captcha) {
+    private void onCopyActionClicked(String captcha ,NotificationUtils.Messages messages ,int postAction) {
         ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE))).setPrimaryClip(ClipData.newPlainText("SmsCaptcha", captcha));
         Toast.makeText(this, getString(R.string.captcha_service_toast_copied_format, captcha), Toast.LENGTH_LONG).show();
     }
@@ -181,6 +189,16 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                 case Settings.SETTING_CAPTCHA_PARSE_PATTERN:
                     mSettings.setCaptchaParsePattern(item.value());
                     initCaptchaUtils();
+                    break;
+                case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED :
+                    mSettings.setCaptchaHideOnLocked(Boolean.parseBoolean(item.value()));
+                    break;
+                case Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION :
+                    mSettings.setCaptchaOverrideDefaultAction(Boolean.parseBoolean(item.value()));
+                    break;
+                case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
+                    mSettings.setCaptchaPostCopyAction(Integer.parseInt(item.value()));
+                    break;
             }
         }
     }

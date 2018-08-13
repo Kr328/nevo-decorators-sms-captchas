@@ -31,21 +31,7 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String NOTIFICATION_EXTRA_KEY = Global.PREFIX_NOTIFICATION_EXTRA + ".key";
 
     public final static String NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT = "notification_channel_subscribe_default";
-    private BroadcastReceiver mSendIntentAndCancelNotificationReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String key = intent.getStringExtra(NOTIFICATION_EXTRA_KEY);
-            PendingIntent originalIntent = intent.getParcelableExtra(INTENT_EXTRA_ORIGINAL_PENDING_INTENT);
 
-            try {
-                originalIntent.send(SubscribeDecoratorService.this ,0 ,intent.setPackage(originalIntent.getCreatorPackage()));
-            } catch (PendingIntent.CanceledException e) {
-                Log.i(TAG, "PendingIntent.send() ", e);
-            }
-
-            cancelNotification(key);
-        }
-    };
     private AppPreferences mAppPreference;
     private Settings mSettings;
 
@@ -63,12 +49,7 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
         else
             notification.priority = mSettings.getSubscribePriority();
 
-        for (Notification.Action action : notification.actions) {
-            PendingIntent originalIntent = action.actionIntent;
-            Intent newIntent = new Intent().setAction(INTENT_ACTION_SEND_PENDING_INTENT_CANCEL).putExtra(NOTIFICATION_EXTRA_KEY, evolving.getKey()).putExtra(INTENT_EXTRA_ORIGINAL_PENDING_INTENT, originalIntent);
-
-            action.actionIntent = PendingIntent.getBroadcast(this, originalIntent.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
+        appendActions(notification ,evolving.getKey() ,new Notification.Action[0]);
 
         extras.putBoolean(Global.NOTIFICATION_EXTRA_APPLIED, true);
 
@@ -83,7 +64,6 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
         mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreference);
 
         mAppPreference.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
-        registerReceiver(mSendIntentAndCancelNotificationReceiver, new IntentFilter(INTENT_ACTION_SEND_PENDING_INTENT_CANCEL));
     }
 
     private void onSettingsChanged(Collection<TrayItem> trayItems) {

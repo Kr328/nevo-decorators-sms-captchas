@@ -3,43 +3,35 @@ package me.kr328.nevo.decorators.smscaptcha.utils;
 import android.app.Notification;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class NotificationUtils {
-    public static String[] getMessages(Notification notification) {
+    public static class Messages {
+        public String   address;
+        public String[] text;
+    }
+
+    public static Messages parseMessages(Notification notification) {
+        Messages result = new Messages();
+        result.address = notification.extras.getCharSequence(Notification.EXTRA_TITLE ,"").toString();
+
         NotificationCompat.MessagingStyle style = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
         if ( style != null ) {
-            return style.getMessages().
+            result.text = style.getMessages().
                     stream().
                     map(NotificationCompat.MessagingStyle.Message::getText).
                     toArray(String[]::new);
         }
         else {
-            return new String[]{notification.extras.getString(Notification.EXTRA_TEXT)};
+            CharSequence message = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
+            if ( message != null )
+                result.text = new String[]{message.toString()};
+            else
+                result.text = new String[0];
         }
-    }
 
-    public static void setMessages(Notification notification ,String[] messages) {
-        NotificationCompat.MessagingStyle originalStyle = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
-        NotificationCompat.MessagingStyle appliedStyle  = null;
-        if ( originalStyle != null ) {
-            appliedStyle = new NotificationCompat.MessagingStyle(originalStyle.getUser());
-            if ( messages.length == originalStyle.getMessages().size() ) {
-                int i = 0;
-                for (NotificationCompat.MessagingStyle.Message message : originalStyle.getMessages()) {
-                    appliedStyle.addMessage(messages[i++] ,message.getTimestamp() ,message.getPerson());
-                }
-            }
-            else { // messages.length != originalStyle.getMessages().size()
-                NotificationCompat.MessagingStyle.Message message = originalStyle.getMessages().get(0);
-                for ( String msg : messages )
-                    appliedStyle.addMessage(msg ,message.getTimestamp() ,message.getPerson());
-            }
-        }
-        else { // originalStyle == null
-            notification.extras.remove(Notification.EXTRA_TEMPLATE);
-            notification.extras.putCharSequence(Notification.EXTRA_TEXT ,messages[0]);
-        }
+        return result;
     }
 
     public static void replaceMessages(Notification notification , Function<CharSequence ,CharSequence> replacer) {
@@ -61,6 +53,9 @@ public class NotificationUtils {
         }
     }
     public static void rebuildMessageStyle(Notification notification) {
-
+        NotificationCompat.MessagingStyle style = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
+        if ( style != null )
+            style.addCompatExtras(notification.extras);
+        else notification.extras.remove(Notification.EXTRA_TEMPLATE);
     }
 }
