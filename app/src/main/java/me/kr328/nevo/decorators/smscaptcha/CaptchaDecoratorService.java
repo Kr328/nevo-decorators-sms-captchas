@@ -30,6 +30,7 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import me.kr328.nevo.decorators.smscaptcha.utils.CaptchaUtils;
+import me.kr328.nevo.decorators.smscaptcha.utils.MessageUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
@@ -148,7 +149,18 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     private void onCopyActionClicked(String captcha ,NotificationUtils.Messages messages ,int postAction) {
-        ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE))).setPrimaryClip(ClipData.newPlainText("SmsCaptcha", captcha));
+        ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE))).
+                setPrimaryClip(ClipData.newPlainText("SmsCaptcha", captcha));
+
+        switch (postAction) {
+            case Settings.POST_ACTION_DELETE :
+                Arrays.stream(messages.text).forEach(t -> MessageUtils.delete(this ,messages.address ,t));
+                break;
+            case Settings.POST_ACTION_MARK_AS_READ :
+                Arrays.stream(messages.text).forEach(t -> MessageUtils.markAsRead(this ,messages.address ,t));
+                break;
+        }
+
         Toast.makeText(this, getString(R.string.captcha_service_toast_copied_format, captcha), Toast.LENGTH_LONG).show();
     }
 

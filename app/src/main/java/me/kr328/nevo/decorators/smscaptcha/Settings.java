@@ -38,7 +38,7 @@ public class Settings {
     public static Settings defaultValueFromContext(Context context) {
         return new Settings(true,
                 false ,
-                0 ,
+                1 ,
                 context.getString(R.string.default_value_identify_captcha_pattern),
                 context.getString(R.string.default_value_parse_captcha_pattern),
                 context.getString(R.string.default_value_identify_subscribe_pattern),
