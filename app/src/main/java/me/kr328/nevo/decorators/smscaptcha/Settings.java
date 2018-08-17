@@ -7,7 +7,7 @@ import net.grandcentrix.tray.TrayPreferences;
 public class Settings {
     public final static String SETTING_CAPTCHA_HIDE_ON_LOCKED            = "setting_captcha_hide_on_locked";
     public final static String SETTING_CAPTCHA_IDENTIFY_PATTERN          = "setting_captcha_identify_pattern";
-    public final static String SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION   = "setting_captcha_override_default";
+    public final static String SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION   = "setting_captcha_override_default_action";
     public final static String SETTING_CAPTCHA_POST_COPY_ACTION          = "setting_captcha_post_copy_action";
     public final static String SETTING_CAPTCHA_PARSE_PATTERN             = "setting_captcha_parse_pattern";
     public final static String SETTING_SUBSCRIBE_IDENTIFY_PATTERN        = "setting_subscribe_identify_pattern";
@@ -38,7 +38,7 @@ public class Settings {
     public static Settings defaultValueFromContext(Context context) {
         return new Settings(true,
                 false ,
-                1 ,
+                0 ,
                 context.getString(R.string.default_value_identify_captcha_pattern),
                 context.getString(R.string.default_value_parse_captcha_pattern),
                 context.getString(R.string.default_value_identify_subscribe_pattern),

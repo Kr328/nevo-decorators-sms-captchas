@@ -6,6 +6,18 @@
             android:key="setting_captcha_hide_on_locked"
             android:summary="@string/setting_captcha_hide_on_locked_summary"
             android:title="@string/setting_captcha_hide_on_locked_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="setting_captcha_override_default_action"
+            android:summary="@string/setting_captcha_override_default_action_summary"
+            android:title="@string/setting_captcha_override_default_action" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/setting_captcha_post_copy_actions"
+            android:entryValues="@array/setting_captcha_post_copy_action_values"
+            android:key="setting_captcha_post_copy_action"
+            android:summary="dynamic"
+            android:title="@string/setting_captcha_post_copy_action" />
         <EditTextPreference
             android:defaultValue="@string/default_value_identify_captcha_pattern"
             android:key="setting_captcha_identify_pattern"
@@ -32,9 +44,9 @@
         <ListPreference
             android:defaultValue="-2"
             android:entries="@array/setting_subscribe_priorities"
-            android:entryValues="@array/settings_subscribe_priority_values"
+            android:entryValues="@array/setting_subscribe_priority_values"
             android:key="setting_subscribe_priority"
-            android:summary="@string/setting_subscribe_priority_summary"
+            android:summary="%s"
             android:title="@string/setting_subscribe_priority" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_other">

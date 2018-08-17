@@ -14,6 +14,9 @@
     <string name="setting_captcha">验证码类短信</string>
     <string name="setting_captcha_hide_on_locked_title">锁屏时隐藏验证码</string>
     <string name="setting_captcha_hide_on_locked_summary">在设备锁定时隐藏验证码</string>
+    <string name="setting_captcha_override_default_action">覆盖原有按钮</string>
+    <string name="setting_captcha_override_default_action_summary">覆盖短信通知原有按钮</string>
+    <string name="setting_captcha_post_copy_action">复制后操作</string>
     <string name="setting_captcha_identify_pattern_title">验证码识别表达式</string>
     <string name="setting_captcha_identify_pattern_summary">识别消息存在验证码的正则表达式</string>
     <string name="setting_captcha_parse_pattern_title">验证码解析表达式</string>
@@ -22,7 +25,6 @@
     <string name="setting_subscribe_identify_pattern">订阅识别表达式</string>
     <string name="setting_subscribe_identify_pattern_summary">识别订阅类短信的正则表达式</string>
     <string name="setting_subscribe_priority">通知优先级</string>
-    <string name="setting_subscribe_priority_summary">订阅类短信的通知优先级</string>
     <string name="setting_subscribe_priority_summary_v26">您的ROM需要在通知设置中配置优先级</string>
     <string name="setting_other">其他</string>
     <string name="setting_hide_in_launcher_title">在启动器中隐藏图标</string>
@@ -32,6 +34,19 @@
     <string name="default_value_identify_captcha_pattern">.*(验证|认证).*</string>
     <string name="default_value_parse_captcha_pattern">(\\d{4,10})</string>
     <string name="default_value_identify_subscribe_pattern">.*(退订).*</string>
+
+    <string name="permission_description">由于系统限制,非默认短信应用需要通过appops赋予修改短信权限</string>
+    <string name="permission_obtain_by_root">通过 ROOT选取 获取</string>
+    <string name="permission_obtain_by_adb">通过 ADB权限 获取</string>
+    <string name="permission_obtain_permission">获取权限</string>
+    <string name="permission_copy_command">复制命令</string>
+    <string name="permission_adb_method">1.准备计算机并配置ADB环境 \n2.打开手机的USB调试并连接计算机 \n3.复制命令并运行</string>
+
+    <string-array name="setting_captcha_post_copy_actions">
+        <item>不进行任何操作</item>
+        <item>复制后标记已读</item>
+        <item>复制后删除消息</item>
+    </string-array>
 
     <string-array name="setting_subscribe_priorities">
         <item>紧急</item>

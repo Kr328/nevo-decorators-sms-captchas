@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -154,10 +153,10 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
         switch (postAction) {
             case Settings.POST_ACTION_DELETE :
-                Arrays.stream(messages.text).forEach(t -> MessageUtils.delete(this ,messages.address ,t));
+                Arrays.stream(messages.text).forEach(t -> MessageUtils.delete(this , t));
                 break;
             case Settings.POST_ACTION_MARK_AS_READ :
-                Arrays.stream(messages.text).forEach(t -> MessageUtils.markAsRead(this ,messages.address ,t));
+                Arrays.stream(messages.text).forEach(t -> MessageUtils.markAsRead(this , t));
                 break;
         }
 
