@@ -8,7 +8,7 @@
 * ##### 授予短信修改权限
     1. 准备计算机并配置ADB环境
     2. 打开手机的USB调试并连接至计算机
-    3. 运行以下命令
+    3. 运行以下命令 (仅一行)
        ```shell
        adb shell appops set me.kr328.nevo.decorators.smscaptcha WRITE_SMS allow
        ```
