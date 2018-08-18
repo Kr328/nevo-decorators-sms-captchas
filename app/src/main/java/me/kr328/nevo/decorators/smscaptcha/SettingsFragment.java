@@ -66,7 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
         mSubscribePriority.setOnPreferenceChangeListener(this::onPreferenceChange);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mSubscribePriority.setOnPreferenceClickListener((Preference p) -> {
                 startActivity(
                         new Intent("android.settings.APP_NOTIFICATION_SETTINGS").

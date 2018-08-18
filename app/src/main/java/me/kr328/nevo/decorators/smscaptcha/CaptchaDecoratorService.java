@@ -65,7 +65,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
         String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.text);
 
-        if (captchas.length == 0 || extras.getBoolean(Global.NOTIFICATION_EXTRA_APPLIED, false))
+        if (captchas.length == 0)
             return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -211,6 +211,8 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setCaptchaPostCopyAction(Integer.parseInt(item.value()));
                     break;
             }
+
+            Log.i(TAG ,"Settings Updated " + item.key() + "=" + item.value());
         }
     }
 
