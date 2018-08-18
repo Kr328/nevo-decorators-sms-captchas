@@ -1,11 +1,15 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
@@ -22,6 +26,8 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
+
+    public final static String WEBSITE_PERMISSION_HELP = "https://github.com/Kr328/nevo-decorators-sms-captchas/blob/develop/docs/obtain_permission.md";
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
 
@@ -89,7 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 valueInteger = Integer.parseInt((String) value);
                 mSettings.setCaptchaPostCopyAction(valueInteger);
                 mAppPreferences.put(key ,valueInteger);
-                startPermissionActivityIfNeed(valueInteger);
+                requestPermission(valueInteger);
                 break;
             case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
@@ -150,9 +156,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         getPreferenceScreen().setEnabled(true);
     }
 
-    private void startPermissionActivityIfNeed(int currentPostActionValue) {
-        if ( currentPostActionValue != Settings.POST_ACTION_NONE )
-            startActivity(new Intent(getActivity() ,PermissionHelpActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    private void requestPermission(int postAction) {
+        if (postAction == Settings.POST_ACTION_NONE) return;
+
+        if ( !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS))
+            requestPermissions(new String[]{Manifest.permission.READ_SMS} ,0);
+        showPermissionTips();
+    }
+
+
+    private void showPermissionTips() {
+        new AlertDialog.Builder(requireContext()).
+                setTitle(R.string.permission_tips_title).
+                setMessage(R.string.permission_tips_content).
+                setNegativeButton(R.string.permission_tips_cancel ,((dialogInterface, i) -> dialogInterface.dismiss())).
+                setPositiveButton(R.string.permission_tips_help ,(dialogInterface, i) -> new CustomTabsIntent.Builder().build().launchUrl(requireContext() ,Uri.parse(WEBSITE_PERMISSION_HELP))).
+                create().show();
     }
 
     private void updateMainActivityEnabled(boolean enabled) {

@@ -35,12 +35,10 @@
     <string name="default_value_parse_captcha_pattern">(\\d{4,10})</string>
     <string name="default_value_identify_subscribe_pattern">.*(退订).*</string>
 
-    <string name="permission_description">由于系统限制,非默认短信应用需要通过appops赋予修改短信权限</string>
-    <string name="permission_obtain_by_root">通过 ROOT选取 获取</string>
-    <string name="permission_obtain_by_adb">通过 ADB权限 获取</string>
-    <string name="permission_obtain_permission">获取权限</string>
-    <string name="permission_copy_command">复制命令</string>
-    <string name="permission_adb_method">1.准备计算机并配置ADB环境 \n2.打开手机的USB调试并连接计算机 \n3.复制命令并运行</string>
+    <string name="permission_tips_title">需要授予短信写入权限</string>
+    <string name="permission_tips_content">因 Android 短信权限变动 需要额外操作授予写入权限</string>
+    <string name="permission_tips_cancel">我已了解</string>
+    <string name="permission_tips_help">查看帮助</string>
 
     <string-array name="setting_captcha_post_copy_actions">
         <item>不进行任何操作</item>

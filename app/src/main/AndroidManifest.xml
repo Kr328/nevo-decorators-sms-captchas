@@ -73,7 +73,6 @@
             android:exported="true"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE" />
 
-        <activity android:name=".PermissionHelpActivity"></activity>
     </application>
 
 </manifest>
