@@ -2,11 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.kr328.nevo.decorators.smscaptcha">
 
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
         <service
@@ -26,7 +29,6 @@
                 android:name="settings.receiver"
                 android:value="SettingsReceiver" />
         </service>
-
         <service
             android:name=".SubscribeDecoratorService"
             android:description="@string/subscribe_service_description"
@@ -48,7 +50,11 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+            </intent-filter>
+        </activity>
 
         <activity-alias
             android:name=".MainActivity"
@@ -57,6 +63,7 @@
             android:targetActivity=".SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -65,6 +72,7 @@
             android:name=".SettingsReceiver"
             android:exported="true"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE" />
+
     </application>
 
 </manifest>

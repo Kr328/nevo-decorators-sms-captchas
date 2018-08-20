@@ -9,4 +9,6 @@ public class Global {
     public final static String PREFIX_NOTIFICATION_EXTRA = PREFIX_NOTIFICATION + ".extra";
 
     public final static String NOTIFICATION_EXTRA_APPLIED = PREFIX_NOTIFICATION_EXTRA + ".applied";
+
+    public final static String NEVOLUTION_PACKAGE_NAME = "com.oasisfeng.nevo";
 }

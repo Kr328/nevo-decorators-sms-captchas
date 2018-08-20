@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/setting_captcha">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="setting_captcha_hide_on_locked"
             android:summary="@string/setting_captcha_hide_on_locked_summary"
             android:title="@string/setting_captcha_hide_on_locked_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="setting_captcha_override_default_action"
+            android:summary="@string/setting_captcha_override_default_action_summary"
+            android:title="@string/setting_captcha_override_default_action" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/setting_captcha_post_copy_actions"
+            android:entryValues="@array/setting_captcha_post_copy_action_values"
+            android:key="setting_captcha_post_copy_action"
+            android:summary="%s"
+            android:title="@string/setting_captcha_post_copy_action" />
         <EditTextPreference
             android:defaultValue="@string/default_value_identify_captcha_pattern"
             android:key="setting_captcha_identify_pattern"
@@ -29,11 +42,10 @@
             android:singleLine="true"
             android:summary="@string/setting_subscribe_identify_pattern_summary"
             android:title="@string/setting_subscribe_identify_pattern" />
-        <ListPreference
+        <Preference
             android:defaultValue="-2"
-            android:enabled="false"
             android:entries="@array/setting_subscribe_priorities"
-            android:entryValues="@array/settings_subscribe_priority_values"
+            android:entryValues="@array/setting_subscribe_priority_values"
             android:key="setting_subscribe_priority"
             android:summary="@string/setting_subscribe_priority_summary_v26"
             android:title="@string/setting_subscribe_priority" />
