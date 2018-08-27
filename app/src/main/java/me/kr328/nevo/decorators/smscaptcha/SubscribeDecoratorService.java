@@ -58,6 +58,8 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
 
     @Override
     protected void onConnected() {
+        super.onConnected();
+
         createNotificationChannels();
 
         mAppPreference = new AppPreferences(this);
