@@ -27,7 +27,7 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
-    public final static String WEBSITE_PERMISSION_HELP = "https://github.com/Kr328/nevo-decorators-sms-captchas/blob/develop/docs/obtain_permission.md";
+    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission";
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
 
@@ -66,7 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
         mSubscribePriority.setOnPreferenceChangeListener(this::onPreferenceChange);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             mSubscribePriority.setOnPreferenceClickListener((Preference p) -> {
                 startActivity(
                         new Intent("android.settings.APP_NOTIFICATION_SETTINGS").
