@@ -17,6 +17,7 @@
             android:description="@string/captcha_service_description"
             android:label="@string/captcha_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            android:directBootAware="true"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />
@@ -34,6 +35,7 @@
             android:description="@string/subscribe_service_description"
             android:label="@string/subscribe_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            android:directBootAware="true"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />

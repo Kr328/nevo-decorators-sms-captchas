@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -65,7 +66,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
         String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.text);
 
-        if (captchas.length == 0 || extras.getBoolean(Global.NOTIFICATION_EXTRA_APPLIED, false))
+        if (captchas.length == 0)
             return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -115,10 +116,13 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     private void loadSettings() {
-        AppPreferences mAppPreferences = new AppPreferences(this);
-        mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreferences);
-
-        mAppPreferences.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
+        if (Objects.requireNonNull(getSystemService(UserManager.class)).isUserUnlocked()) {
+            AppPreferences mAppPreferences = new AppPreferences(this);
+            mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreferences);
+            mAppPreferences.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
+        } else {
+            mSettings = Settings.defaultValueFromContext(createDeviceProtectedStorageContext());
+        }
     }
 
     private void createNotificationChannels() {
@@ -161,6 +165,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         }
 
         Toast.makeText(this, getString(R.string.captcha_service_toast_copied_format, captcha), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onUserUnlocked() {
+        this.loadSettings();
     }
 
     private void registerReceivers() {
@@ -211,6 +220,8 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setCaptchaPostCopyAction(Integer.parseInt(item.value()));
                     break;
             }
+
+            Log.i(TAG ,"Settings Updated " + item.key() + "=" + item.value());
         }
     }
 

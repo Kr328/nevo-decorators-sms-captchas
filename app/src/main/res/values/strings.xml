@@ -32,7 +32,7 @@
     <string name="setting_pattern_invalid">正则表达式无效</string>
 
     <string name="default_value_identify_captcha_pattern">.*(验证|认证).*</string>
-    <string name="default_value_parse_captcha_pattern">(\\d{4,10})</string>
+    <string name="default_value_parse_captcha_pattern">(?!-)(\\d{4,10})(?!-)</string>
     <string name="default_value_identify_subscribe_pattern">.*(退订).*</string>
 
     <string name="permission_tips_title">需要授予短信写入权限</string>

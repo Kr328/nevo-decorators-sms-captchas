@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.util.Log;
 
 import com.oasisfeng.nevo.sdk.MutableNotification;
@@ -21,6 +22,7 @@ import net.grandcentrix.tray.core.TrayItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
@@ -32,7 +34,6 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
 
     public final static String NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT = "notification_channel_subscribe_default";
 
-    private AppPreferences mAppPreference;
     private Settings mSettings;
 
     @Override
@@ -58,12 +59,27 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
 
     @Override
     protected void onConnected() {
+        super.onConnected();
+
+        loadSettings();
         createNotificationChannels();
+    }
 
-        mAppPreference = new AppPreferences(this);
-        mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreference);
+    @Override
+    public void onUserUnlocked() {
+        this.loadSettings();
+    }
 
-        mAppPreference.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
+    public void loadSettings() {
+        if ( Objects.requireNonNull(getSystemService(UserManager.class)).isUserUnlocked() ) {
+            AppPreferences mAppPreference = new AppPreferences(this);
+            mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreference);
+
+            mAppPreference.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
+        }
+        else {
+            mSettings = Settings.defaultValueFromContext(createDeviceProtectedStorageContext());
+        }
     }
 
     private void onSettingsChanged(Collection<TrayItem> trayItems) {

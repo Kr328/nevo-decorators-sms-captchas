@@ -27,7 +27,7 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
-    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captchas/docs/obtain_permission";
+    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission";
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
 
