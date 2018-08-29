@@ -19,8 +19,7 @@ import java.util.HashMap;
 import me.kr328.nevo.decorators.smscaptcha.utils.BroadcastUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
 
-@SuppressLint("Registered")
-public class BaseSmsDecoratorService extends NevoDecoratorService {
+public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
     public static final String TAG = BaseSmsDecoratorService.class.getSimpleName();
 
     public static final String INTENT_ACTION_CLICKED_ACTION             = Global.PREFIX_INTENT_ACTION + ".clicked.action";
@@ -55,6 +54,13 @@ public class BaseSmsDecoratorService extends NevoDecoratorService {
         }
     };
 
+    private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BaseSmsDecoratorService.this.onUserUnlocked();
+        }
+    };
+
     public interface ActionClickedListener {
         void onClicked(Intent intent);
     }
@@ -74,6 +80,7 @@ public class BaseSmsDecoratorService extends NevoDecoratorService {
 
         registerReceiver(mOnActionClickedReceiver ,new IntentFilter(INTENT_ACTION_CLICKED_ACTION));
         registerReceiver(mActionProxyReceiver ,new IntentFilter(INTENT_ACTION_PROXY_ACTION));
+        registerReceiver(mUserUnlockedReceiver ,new IntentFilter(Intent.ACTION_USER_UNLOCKED));
     }
 
     @Override
@@ -82,7 +89,10 @@ public class BaseSmsDecoratorService extends NevoDecoratorService {
 
         unregisterReceiver(mOnActionClickedReceiver);
         unregisterReceiver(mActionProxyReceiver);
+        unregisterReceiver(mUserUnlockedReceiver);
     }
+
+    public abstract void onUserUnlocked();
 
     protected Notification.Action createNonIconAction(String key ,String title , ActionClickedListener listener) {
         int    listenerHashcode     = listener.hashCode();

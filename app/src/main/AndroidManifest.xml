@@ -6,19 +6,18 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
 
     <application
-        android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:directBootAware="true"
         android:theme="@style/app_theme">
         <service
             android:name=".CaptchaDecoratorService"
             android:description="@string/captcha_service_description"
             android:label="@string/captcha_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            android:directBootAware="true"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />
@@ -36,6 +35,7 @@
             android:description="@string/subscribe_service_description"
             android:label="@string/subscribe_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
+            android:directBootAware="true"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />
