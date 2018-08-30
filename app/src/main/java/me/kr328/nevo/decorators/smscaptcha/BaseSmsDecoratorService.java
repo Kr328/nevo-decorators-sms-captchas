@@ -33,9 +33,13 @@ public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
         public void onReceive(Context context, Intent intent) {
             String key   = intent.getStringExtra(INTENT_EXTRA_NOTIFICATION_KEY);
             int hashcode = intent.getIntExtra(INTENT_EXTRA_ACTION_HASHCODE ,0);
+
+            Log.i(TAG ,"Key Clicked " + key + " hashcode " + hashcode);
+
             SparseArray<ActionClickedListener> listeners = actionsMap.get(key);
+            if ( listeners == null ) return;
             ActionClickedListener listener = listeners.get(hashcode);
-            if ( listener != null ) listener.onClicked(intent);
+            if ( listener  != null ) listener.onClicked(intent);
             cancelNotification(key);
         }
     };
