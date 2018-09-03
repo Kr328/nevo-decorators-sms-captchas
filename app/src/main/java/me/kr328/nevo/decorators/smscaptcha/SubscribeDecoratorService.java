@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
-    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms"};
+    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations"};
 
     public final static String INTENT_ACTION_SEND_PENDING_INTENT_CANCEL = Global.PREFIX_INTENT_ACTION + ".send.and.cancel";
     public final static String INTENT_EXTRA_ORIGINAL_PENDING_INTENT = Global.PREFIX_INTENT_EXTRA + ".original.intent";

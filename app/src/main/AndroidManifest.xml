@@ -25,7 +25,7 @@
 
             <meta-data
                 android:name="packages"
-                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms" />
+                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms|com.sonyericsson.conversations" />
             <meta-data
                 android:name="settings.receiver"
                 android:value="SettingsReceiver" />
@@ -43,7 +43,7 @@
 
             <meta-data
                 android:name="packages"
-                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms" />
+                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms|com.sonyericsson.conversations" />
             <meta-data
                 android:name="settings.receiver"
                 android:value="SettingsReceiver" />

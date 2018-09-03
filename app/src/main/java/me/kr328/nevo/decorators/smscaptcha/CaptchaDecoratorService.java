@@ -36,7 +36,7 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     public static final String TAG = CaptchaDecoratorService.class.getSimpleName();
-    public static final String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms"};
+    public static final String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations"};
 
     public static final String NOTIFICATION_CHANNEL_CAPTCHA_NORMAL = "notification_channel_captcha_normal";
     public static final String NOTIFICATION_CHANNEL_CAPTCHA_SILENT = "notification_channel_captcha_silent";
