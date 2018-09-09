@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.UserManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -64,7 +66,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         Bundle              extras          = notification.extras;
         boolean             recast          = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false);
         NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
-        String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.text);
+        String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.texts);
 
         if (captchas.length == 0)
             return;
@@ -91,7 +93,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages , String[] captchas) {
         Notification.Action[] actions = new Notification.Action[] {
-                createNonIconAction(key ,getString(R.string.captcha_service_notification_locked_action_copy_code) ,(intent -> onCopyActionClicked(captchas[0] ,messages ,mSettings.getCaptchaPostCopyAction())))
+                createNonIconAction(key ,getString(R.string.captcha_service_notification_locked_action_copy_code) ,new CaptchaMessage(messages ,captchas[0]))
         };
 
         NotificationUtils.replaceMessages(notification ,text -> CaptchaUtils.replaceCaptchaWithChar(text ,captchas ,'*'));
@@ -104,7 +106,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     private void applyKeyguardUnlocked(Notification notification, String key, NotificationUtils.Messages messages, String[] captchas) {
         Notification.Action[] actions = Arrays.stream(captchas).
-                map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,intent -> onCopyActionClicked(captcha ,messages ,mSettings.getCaptchaPostCopyAction()))).
+                map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,new CaptchaMessage(messages ,captcha))).
                 toArray(Notification.Action[]::new);
 
         NotificationUtils.rebuildMessageStyle(notification);
@@ -151,16 +153,16 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         mAppliedKeys.clear();
     }
 
-    private void onCopyActionClicked(String captcha ,NotificationUtils.Messages messages ,int postAction) {
+    private void copyCaptcha(String captcha , NotificationUtils.Messages messages) {
         ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE))).
                 setPrimaryClip(ClipData.newPlainText("SmsCaptcha", captcha));
 
-        switch (postAction) {
+        switch (mSettings.getCaptchaPostCopyAction()) {
             case Settings.POST_ACTION_DELETE :
-                Arrays.stream(messages.text).forEach(t -> MessageUtils.delete(this , t));
+                Arrays.stream(messages.texts).forEach(t -> MessageUtils.delete(this , t));
                 break;
             case Settings.POST_ACTION_MARK_AS_READ :
-                Arrays.stream(messages.text).forEach(t -> MessageUtils.markAsRead(this , t));
+                Arrays.stream(messages.texts).forEach(t -> MessageUtils.markAsRead(this , t));
                 break;
         }
 
@@ -170,6 +172,13 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     @Override
     public void onUserUnlocked() {
         this.loadSettings();
+    }
+
+    @Override
+    public void onActionClicked(Parcelable cookies) {
+        CaptchaMessage captchaMessage = (CaptchaMessage) cookies;
+
+        copyCaptcha(captchaMessage.captcha ,captchaMessage.messages);
     }
 
     private void registerReceivers() {
@@ -231,4 +240,45 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
         unregisterReceivers();
     }
+}
+
+class CaptchaMessage implements Parcelable {
+    public NotificationUtils.Messages messages;
+    public String                     captcha;
+
+    public CaptchaMessage(NotificationUtils.Messages messages ,String captcha) {
+        this.messages = messages;
+        this.captcha  = captcha;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(messages.texts.length);
+
+        for (String s : messages.texts) dest.writeString(s);
+
+        dest.writeString(captcha);
+    }
+
+    public static final Creator<CaptchaMessage> CREATOR = new Creator<CaptchaMessage>() {
+        @Override
+        public CaptchaMessage createFromParcel(Parcel source) {
+            NotificationUtils.Messages messages = new NotificationUtils.Messages();
+            messages.texts = new String[source.readInt()];
+
+            for ( int i = 0 ; i < messages.texts.length ; i++ ) messages.texts[i] = source.readString();
+
+            return new CaptchaMessage(messages ,source.readString());
+        }
+
+        @Override
+        public CaptchaMessage[] newArray(int size) {
+            return new CaptchaMessage[size];
+        }
+    };
 }

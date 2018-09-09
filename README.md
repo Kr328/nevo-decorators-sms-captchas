@@ -1,8 +1,8 @@
 # Sms Captchas Decorator for Nevolution       
-Download prebuilt package from [Github releases](https://github.com/Kr328/nevo-decorators-sms-captchas/releases)
+Download prebuilt package from [Github releases](https://github.com/Kr328/nevo-decorators-sms-captcha/releases)
 
 ## Introduction
-Enhance short message captchas notification with following features:    
+Enhance short message captcha notification with following features:
 - Direct copy captcha on notificaton.
 - Hide captcha on lockscreen.
 

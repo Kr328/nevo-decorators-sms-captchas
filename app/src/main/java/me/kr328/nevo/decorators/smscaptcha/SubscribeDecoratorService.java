@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.UserManager;
 import android.util.Log;
 
@@ -68,6 +69,11 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     @Override
     public void onUserUnlocked() {
         this.loadSettings();
+    }
+
+    @Override
+    public void onActionClicked(Parcelable cookies) {
+
     }
 
     public void loadSettings() {
