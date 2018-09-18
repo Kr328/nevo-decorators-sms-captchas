@@ -27,7 +27,7 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
-    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captcha/obtain_permission";
+    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission";
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
 
@@ -54,7 +54,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mCaptchaIdentifyPattern        = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
         mCaptchaParsePattern           = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
         mSubscribeIdentityPattern      = (EditTextPreference) findPreference(Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN);
-        mSubscribePriority             = findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
+        mSubscribePriority             =                      findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
         mHideInLauncher                = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
 
         mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);

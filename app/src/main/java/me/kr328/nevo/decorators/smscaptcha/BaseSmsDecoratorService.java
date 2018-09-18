@@ -1,6 +1,5 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -9,16 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Icon;
 import android.os.Parcelable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.oasisfeng.nevo.sdk.NevoDecoratorService;
-
-import java.util.HashMap;
-
-import me.kr328.nevo.decorators.smscaptcha.utils.BroadcastUtils;
-import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
 
 public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
     public static final String TAG = BaseSmsDecoratorService.class.getSimpleName();

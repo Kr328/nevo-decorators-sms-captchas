@@ -240,45 +240,46 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
         unregisterReceivers();
     }
-}
 
-class CaptchaMessage implements Parcelable {
-    public NotificationUtils.Messages messages;
-    public String                     captcha;
+    static class CaptchaMessage implements Parcelable {
+        NotificationUtils.Messages messages;
+        String                     captcha;
 
-    public CaptchaMessage(NotificationUtils.Messages messages ,String captcha) {
-        this.messages = messages;
-        this.captcha  = captcha;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(messages.texts.length);
-
-        for (String s : messages.texts) dest.writeString(s);
-
-        dest.writeString(captcha);
-    }
-
-    public static final Creator<CaptchaMessage> CREATOR = new Creator<CaptchaMessage>() {
-        @Override
-        public CaptchaMessage createFromParcel(Parcel source) {
-            NotificationUtils.Messages messages = new NotificationUtils.Messages();
-            messages.texts = new String[source.readInt()];
-
-            for ( int i = 0 ; i < messages.texts.length ; i++ ) messages.texts[i] = source.readString();
-
-            return new CaptchaMessage(messages ,source.readString());
+        CaptchaMessage(NotificationUtils.Messages messages, String captcha) {
+            this.messages = messages;
+            this.captcha  = captcha;
         }
 
         @Override
-        public CaptchaMessage[] newArray(int size) {
-            return new CaptchaMessage[size];
+        public int describeContents() {
+            return 0;
         }
-    };
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(messages.texts.length);
+
+            for (String s : messages.texts) dest.writeString(s);
+
+            dest.writeString(captcha);
+        }
+
+        public static final Creator<CaptchaMessage> CREATOR = new Creator<CaptchaMessage>() {
+            @Override
+            public CaptchaMessage createFromParcel(Parcel source) {
+                NotificationUtils.Messages messages = new NotificationUtils.Messages();
+                messages.texts = new String[source.readInt()];
+
+                for ( int i = 0 ; i < messages.texts.length ; i++ ) messages.texts[i] = source.readString();
+
+                return new CaptchaMessage(messages ,source.readString());
+            }
+
+            @Override
+            public CaptchaMessage[] newArray(int size) {
+                return new CaptchaMessage[size];
+            }
+        };
+    }
 }
+
