@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.UserManager;
 import android.util.Log;
 
@@ -26,11 +27,7 @@ import java.util.Objects;
 
 public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
-    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms"};
-
-    public final static String INTENT_ACTION_SEND_PENDING_INTENT_CANCEL = Global.PREFIX_INTENT_ACTION + ".send.and.cancel";
-    public final static String INTENT_EXTRA_ORIGINAL_PENDING_INTENT = Global.PREFIX_INTENT_EXTRA + ".original.intent";
-    public final static String NOTIFICATION_EXTRA_KEY = Global.PREFIX_NOTIFICATION_EXTRA + ".key";
+    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations"};
 
     public final static String NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT = "notification_channel_subscribe_default";
 
@@ -68,6 +65,11 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     @Override
     public void onUserUnlocked() {
         this.loadSettings();
+    }
+
+    @Override
+    public void onActionClicked(String key ,Parcelable cookies) {
+
     }
 
     public void loadSettings() {

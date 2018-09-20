@@ -16,6 +16,8 @@
     <string name="setting_captcha_hide_on_locked_summary">在设备锁定时隐藏验证码</string>
     <string name="setting_captcha_override_default_action">覆盖原有按钮</string>
     <string name="setting_captcha_override_default_action_summary">覆盖短信通知原有按钮</string>
+    <string name="setting_captcha_use_default_pattern">使用内建正则表达式</string>
+    <string name="setting_captcha_use_default_pattern_summary">使用内建正则表达式识别验证码</string>
     <string name="setting_captcha_post_copy_action">复制后操作</string>
     <string name="setting_captcha_identify_pattern_title">验证码识别表达式</string>
     <string name="setting_captcha_identify_pattern_summary">识别消息存在验证码的正则表达式</string>
@@ -31,9 +33,7 @@
     <string name="setting_hide_in_launcher_summary">您仍然可以从Nevolution启动本界面</string>
     <string name="setting_pattern_invalid">正则表达式无效</string>
 
-    <string name="default_value_identify_captcha_pattern">.*(验证|认证).*</string>
-    <string name="default_value_parse_captcha_pattern">(?!-)(\\d{4,10})(?!-)</string>
-    <string name="default_value_identify_subscribe_pattern">.*(退订).*</string>
+    <string name="default_value_identify_subscribe_pattern">.*(退|T).*</string>
 
     <string name="permission_tips_title">需要授予短信写入权限</string>
     <string name="permission_tips_content">因 Android 短信权限变动 需要额外操作授予写入权限</string>

@@ -1,24 +1,23 @@
 package me.kr328.nevo.decorators.smscaptcha.utils;
 
 import android.app.Notification;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.NotificationCompat;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 public class NotificationUtils {
     public static class Messages {
-        public String   address;
-        public String[] text;
+        public String[] texts;
     }
 
     public static Messages parseMessages(Notification notification) {
         Messages result = new Messages();
-        result.address = notification.extras.getCharSequence(Notification.EXTRA_TITLE ,"").toString();
 
         NotificationCompat.MessagingStyle style = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification);
         if ( style != null ) {
-            result.text = style.getMessages().
+            result.texts = style.getMessages().
                     stream().
                     map(NotificationCompat.MessagingStyle.Message::getText).
                     toArray(String[]::new);
@@ -26,9 +25,9 @@ public class NotificationUtils {
         else {
             CharSequence message = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
             if ( message != null )
-                result.text = new String[]{message.toString()};
+                result.texts = new String[]{message.toString()};
             else
-                result.text = new String[0];
+                result.texts = new String[0];
         }
 
         return result;
