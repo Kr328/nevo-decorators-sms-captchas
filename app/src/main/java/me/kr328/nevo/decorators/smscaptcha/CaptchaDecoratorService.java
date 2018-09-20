@@ -142,9 +142,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     private void initCaptchaUtils() {
-        mCaptchaUtils = new CaptchaUtils(
-                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), getString(R.string.default_value_identify_captcha_pattern) ,Pattern.CASE_INSENSITIVE),
-                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), getString(R.string.default_value_parse_captcha_pattern) ,Pattern.CASE_INSENSITIVE));
+        mCaptchaUtils = new CaptchaUtils(mSettings.isCaptchaUseDefaultPattern() ,
+                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), "" ,Pattern.CASE_INSENSITIVE),
+                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), "" ,Pattern.CASE_INSENSITIVE));
+
+        Log.d(TAG ,"CaptchaUtils " + mSettings.isCaptchaUseDefaultPattern() + " " + mSettings.getCaptchaIdentifyPattern() + " " + mSettings.getCaptchaParsePattern());
     }
 
     private void recastAllNotifications(Bundle fillInExtras) {
@@ -175,8 +177,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     @Override
-    public void onActionClicked(Parcelable cookies) {
+    public void onActionClicked(String key ,Parcelable cookies) {
         CaptchaMessage captchaMessage = (CaptchaMessage) cookies;
+
+        if ( captchaMessage == null )
+            return;
 
         copyCaptcha(captchaMessage.captcha ,captchaMessage.messages);
     }
@@ -219,6 +224,10 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setCaptchaParsePattern(item.value());
                     initCaptchaUtils();
                     break;
+                case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
+                    mSettings.setCaptchaUseDefaultPattern(Boolean.parseBoolean(item.value()));
+                    initCaptchaUtils();
+                    break;
                 case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED :
                     mSettings.setCaptchaHideOnLocked(Boolean.parseBoolean(item.value()));
                     break;
@@ -228,6 +237,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                 case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
                     mSettings.setCaptchaPostCopyAction(Integer.parseInt(item.value()));
                     break;
+
             }
 
             Log.i(TAG ,"Settings Updated " + item.key() + "=" + item.value());

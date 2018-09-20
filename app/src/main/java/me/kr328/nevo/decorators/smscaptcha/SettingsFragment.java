@@ -91,11 +91,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 mSettings.setCaptchaOverrideDefaultAction((Boolean) value);
                 mAppPreferences.put(key ,(Boolean) value);
                 break;
+            case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
+                mSettings.setCaptchaUseDefaultPattern((Boolean) value);
+                mAppPreferences.put(key ,(Boolean) value);
+                break;
             case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
                 valueInteger = Integer.parseInt((String) value);
                 mSettings.setCaptchaPostCopyAction(valueInteger);
                 mAppPreferences.put(key ,valueInteger);
-                requestPermission(valueInteger);
+                showPermissionTips(valueInteger);
                 break;
             case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
@@ -156,20 +160,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         getPreferenceScreen().setEnabled(true);
     }
 
-    private void requestPermission(int postAction) {
+    private void showPermissionTips(int postAction) {
         if (postAction == Settings.POST_ACTION_NONE) return;
 
-        if ( !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS))
-            requestPermissions(new String[]{Manifest.permission.READ_SMS} ,0);
-        showPermissionTips();
-    }
-
-
-    private void showPermissionTips() {
         new AlertDialog.Builder(requireContext()).
                 setTitle(R.string.permission_tips_title).
                 setMessage(R.string.permission_tips_content).
-                setNegativeButton(R.string.permission_tips_cancel ,((dialogInterface, i) -> dialogInterface.dismiss())).
                 setPositiveButton(R.string.permission_tips_help ,(dialogInterface, i) -> new CustomTabsIntent.Builder().build().launchUrl(requireContext() ,Uri.parse(WEBSITE_PERMISSION_HELP))).
                 create().show();
     }

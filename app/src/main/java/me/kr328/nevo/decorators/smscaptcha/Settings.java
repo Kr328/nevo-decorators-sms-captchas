@@ -9,6 +9,7 @@ public class Settings {
     public final static String SETTING_CAPTCHA_IDENTIFY_PATTERN          = "setting_captcha_identify_pattern";
     public final static String SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION   = "setting_captcha_override_default_action";
     public final static String SETTING_CAPTCHA_POST_COPY_ACTION          = "setting_captcha_post_copy_action";
+    public final static String SETTING_CAPTCHA_USE_DEFAULT_PATTERN       = "setting_captcha_use_default_pattern";
     public final static String SETTING_CAPTCHA_PARSE_PATTERN             = "setting_captcha_parse_pattern";
     public final static String SETTING_SUBSCRIBE_IDENTIFY_PATTERN        = "setting_subscribe_identify_pattern";
     public final static String SETTING_SUBSCRIBE_PRIORITY                = "setting_subscribe_priority";
@@ -20,15 +21,17 @@ public class Settings {
     private boolean captchaHideOnLocked;
     private boolean captchaOverrideDefaultAction;
     private int     captchaPostCopyAction;
+    private boolean captchaUseDefaultPattern;
     private String  captchaIdentifyPattern;
     private String  captchaParsePattern;
     private String  subscribeIdentifyPattern;
     private int     subscribePriority;
 
-    public Settings(boolean captchaHideOnLocked,boolean captchaOverrideDefaultAction ,int captchaPostCopyAction ,String captchaIdentifyPattern, String captchaParsePattern, String subscribeIdentifyPattern, int subscribePriority) {
+    public Settings(boolean captchaHideOnLocked,boolean captchaOverrideDefaultAction ,int captchaPostCopyAction ,boolean captchaUseDefaultPattern,String captchaIdentifyPattern, String captchaParsePattern, String subscribeIdentifyPattern, int subscribePriority) {
         this.setCaptchaHideOnLocked(captchaHideOnLocked);
         this.setCaptchaOverrideDefaultAction(captchaOverrideDefaultAction);
         this.setCaptchaPostCopyAction(captchaPostCopyAction);
+        this.setCaptchaUseDefaultPattern(captchaUseDefaultPattern);
         this.setCaptchaIdentifyPattern(captchaIdentifyPattern);
         this.setCaptchaParsePattern(captchaParsePattern);
         this.setSubscribeIdentifyPattern(subscribeIdentifyPattern);
@@ -39,8 +42,9 @@ public class Settings {
         return new Settings(true,
                 false ,
                 0 ,
-                context.getString(R.string.default_value_identify_captcha_pattern),
-                context.getString(R.string.default_value_parse_captcha_pattern),
+                true ,
+                "",
+                "",
                 context.getString(R.string.default_value_identify_subscribe_pattern),
                 -2);
     }
@@ -49,6 +53,7 @@ public class Settings {
         setCaptchaHideOnLocked(preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED, isCaptchaHideOnLocked()));
         setCaptchaOverrideDefaultAction(preferences.getBoolean(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,isCaptchaOverrideDefaultAction()));
         setCaptchaPostCopyAction(preferences.getInt(SETTING_CAPTCHA_POST_COPY_ACTION ,getCaptchaPostCopyAction()));
+        setCaptchaUseDefaultPattern(preferences.getBoolean(SETTING_CAPTCHA_USE_DEFAULT_PATTERN ,true));
         setCaptchaIdentifyPattern(preferences.getString(SETTING_CAPTCHA_IDENTIFY_PATTERN, getCaptchaIdentifyPattern()));
         setCaptchaParsePattern(preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN, getCaptchaParsePattern()));
         setSubscribeIdentifyPattern(preferences.getString(SETTING_SUBSCRIBE_IDENTIFY_PATTERN, getSubscribeIdentifyPattern()));
@@ -111,5 +116,13 @@ public class Settings {
 
     public void setCaptchaPostCopyAction(int captchaPostCopyAction) {
         this.captchaPostCopyAction = captchaPostCopyAction;
+    }
+
+    public boolean isCaptchaUseDefaultPattern() {
+        return captchaUseDefaultPattern;
+    }
+
+    public void setCaptchaUseDefaultPattern(boolean captchaUseDefaultPattern) {
+        this.captchaUseDefaultPattern = captchaUseDefaultPattern;
     }
 }

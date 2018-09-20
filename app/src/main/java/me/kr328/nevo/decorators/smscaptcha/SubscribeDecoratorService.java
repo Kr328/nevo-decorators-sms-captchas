@@ -68,7 +68,7 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     }
 
     @Override
-    public void onActionClicked(Parcelable cookies) {
+    public void onActionClicked(String key ,Parcelable cookies) {
 
     }
 
