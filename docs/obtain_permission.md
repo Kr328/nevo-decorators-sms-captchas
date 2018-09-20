@@ -19,4 +19,4 @@
        adb shell appops set me.kr328.nevo.decorators.smscaptcha WRITE_SMS allow
        ```
   - 使用 AppOps 类应用 (AppOps,AppOpsX)  
-    在列表中找到本应用并调整 **短信写入权限** 为 **允许 **
+    在列表中找到本应用并调整 **短信写入权限** 为 **允许**  
