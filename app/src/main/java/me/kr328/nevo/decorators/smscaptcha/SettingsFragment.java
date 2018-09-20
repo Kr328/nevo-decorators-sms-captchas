@@ -136,7 +136,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         return false;
     }
-
+    
     private void loadSettingsAndUpdateViews() {
         mAppPreferences = new AppPreferences(Objects.requireNonNull(getActivity()));
         mSettings = Settings.defaultValueFromContext(getActivity()).readFromTrayPreference(mAppPreferences);
