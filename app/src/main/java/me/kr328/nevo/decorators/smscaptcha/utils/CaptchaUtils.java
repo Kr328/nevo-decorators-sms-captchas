@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CaptchaUtils {
-    private static final Pattern defaultIdentifyPattern = Pattern.compile(".*((验证|確認|驗證|校验|动态|确认|随机|激活|兑换|认证|交易|授权|操作|提取|安全|登陆|登录|verification |confirmation )(码|碼|代码|代碼|号码|密码|code|コード)|口令|Steam|快递|快件|单号|订单).*");
-    private static final Pattern defaultParsePattern    = Pattern.compile("((?<!\\d|(联通|尾号|金额|支付|末四位)(为)?)(G-)?\\d{4,6}(?!\\d|年|账|动画))|((?<=(code is|码|碼|コードは)[是为為]?[『「【〖（(：: ]?)(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,6}(?![a-zA-Z0-9]))|((?<!\\w)\\w{4,6}(?!\\w)(?= is your))|((?<=(取件码|密码|货码|暗号)[『「【〖（(：: ]?)(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,8}(?![a-zA-Z0-9]))");
+    private static final Pattern defaultIdentifyPattern = Pattern.compile(".*((验证|確認|驗證|校验|动态|确认|随机|激活|兑换|认证|交易|授权|操作|提取|安全|登陆|登录|verification |confirmation )(码|碼|代码|代碼|号码|密码|code|コード)|口令|Steam|快递|快件|单号|订单|包裹).*");
+    private static final Pattern defaultParsePattern    = Pattern.compile("((?<!\\d|(联通|尾号|金额|支付|末四位)(为)?)(G-)?\\d{4,8}(?!\\d|年|账|动画))|((?<=(code is|码|碼|コードは)[是为為]?[『「【〖（(：: ]?)(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,8}(?![a-zA-Z0-9]))|((?<!\\w)\\w{4,8}(?!\\w)(?= is your))|((?<=(取件码|密码|货码|暗号|凭|号码)[『「【〖（(:：“\" ]?)(?<![a-zA-Z0-9-])[a-zA-Z0-9-]{4,10}(?![a-zA-Z0-9-]))|货号[0-9]{1,}");
 
     private boolean useDefault;
 
