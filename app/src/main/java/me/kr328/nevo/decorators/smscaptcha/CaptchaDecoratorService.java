@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import me.kr328.nevo.decorators.smscaptcha.utils.CaptchaUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.MessageUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
+import me.kr328.nevo.decorators.smscaptcha.utils.PackageUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 public class CaptchaDecoratorService extends BaseSmsDecoratorService {
@@ -137,7 +138,8 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
             notificationChannels.add(channelSilent);
 
             for (String packageName : TARGET_PACKAGES)
-                createNotificationChannels(packageName, notificationChannels);
+                if (PackageUtils.hasPackageInstalled(this ,packageName))
+                    createNotificationChannels(packageName, notificationChannels);
         }
     }
 

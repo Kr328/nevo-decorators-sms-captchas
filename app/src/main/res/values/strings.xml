@@ -20,9 +20,9 @@
     <string name="setting_captcha_use_default_pattern_summary">使用内建正则表达式识别验证码</string>
     <string name="setting_captcha_post_copy_action">复制后操作</string>
     <string name="setting_captcha_identify_pattern_title">自定义验证码识别表达式</string>
-    <string name="setting_captcha_identify_pattern_summary">自定义识别消息存在验证码的正则表达式</string>
+    <string name="setting_captcha_identify_pattern_summary">识别消息存在验证码的正则表达式</string>
     <string name="setting_captcha_parse_pattern_title">自定义验证码解析表达式</string>
-    <string name="setting_captcha_parse_pattern_summary">自定义解析消息中的验证码的正则表达式</string>
+    <string name="setting_captcha_parse_pattern_summary">解析消息中的验证码的正则表达式</string>
     <string name="setting_subscribe">订阅类短信</string>
     <string name="setting_subscribe_identify_pattern">订阅识别表达式</string>
     <string name="setting_subscribe_identify_pattern_summary">识别订阅类短信的正则表达式</string>
