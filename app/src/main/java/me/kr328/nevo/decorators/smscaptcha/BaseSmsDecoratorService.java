@@ -84,7 +84,7 @@ public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
     protected Notification.Action createNonIconAction(String key, String title, Parcelable cookies) {
         Icon icon = Icon.createWithResource(this, R.drawable.ic_empty);
         Intent intent = new Intent().setAction(INTENT_ACTION_CLICKED_ACTION).putExtra(INTENT_EXTRA_COOKIES, cookies).putExtra(INTENT_EXTRA_NOTIFICATION_KEY, key);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, key.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, cookies.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new Notification.Action.Builder(icon, title, pendingIntent).build();
     }
