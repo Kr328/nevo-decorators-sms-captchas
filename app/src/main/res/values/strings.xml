@@ -40,6 +40,10 @@
     <string name="permission_tips_cancel">I already know</string>
     <string name="permission_tips_help">View help</string>
 
+    <string name="missing_nevolution_dialog_title">Missing Nevolution</string>
+    <string name="missing_nevolution_dialog_message">This app relies on Nevolution. Must install it first.</string>
+    <string name="missing_nevolution_dialog_button">Goto PlayStore</string>
+
     <string-array name="setting_captcha_post_copy_actions">
         <item>Do nothing</item>
         <item>Mark As Read</item>

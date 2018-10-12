@@ -40,6 +40,10 @@
     <string name="permission_tips_cancel">我已了解</string>
     <string name="permission_tips_help">查看帮助</string>
 
+    <string name="missing_nevolution_dialog_title">无法找到 Nevolution</string>
+    <string name="missing_nevolution_dialog_message">此应用依赖于 Nevolution 运行</string>
+    <string name="missing_nevolution_dialog_button">前往 PlayStore</string>
+
     <string-array name="setting_captcha_post_copy_actions">
         <item>不进行任何操作</item>
         <item>复制后标记已读</item>
