@@ -3,7 +3,6 @@ package me.kr328.nevo.decorators.smscaptcha;
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -26,8 +25,6 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
-
-    public final static String WEBSITE_PERMISSION_HELP = "https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission";
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
 
@@ -166,7 +163,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new AlertDialog.Builder(requireContext()).
                 setTitle(R.string.permission_tips_title).
                 setMessage(R.string.permission_tips_content).
-                setPositiveButton(R.string.permission_tips_help ,(dialogInterface, i) -> new CustomTabsIntent.Builder().build().launchUrl(requireContext() ,Uri.parse(WEBSITE_PERMISSION_HELP))).
+                setPositiveButton(R.string.permission_tips_help ,(dialogInterface, i) -> new CustomTabsIntent.Builder().build().launchUrl(requireContext() ,Uri.parse(getString(R.string.permission_help_page_url)))).
                 create().show();
     }
 
