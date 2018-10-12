@@ -11,8 +11,8 @@ Enhance short message captcha notification with following features:
  - [Nevolution](https://play.google.com/store/apps/details?id=com.oasisfeng.nevo) installed
  - AOSP based ROM
 
-## TO-DO
- - Support multi language ( Currently Chinese only )
+## Thanks
+ - Icon - [fython](https://github.com/fython) 
 
 ## License
 GPLv3
