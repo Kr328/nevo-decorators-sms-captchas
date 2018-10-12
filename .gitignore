@@ -12,6 +12,7 @@ gradlew.bat
 gradle.properties
 .gradle
 build
+release
 
 # OSX files
 .DS_Store

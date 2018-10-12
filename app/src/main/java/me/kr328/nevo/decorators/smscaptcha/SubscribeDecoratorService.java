@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
-    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations"};
+    public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations" ,"com.moez.QKSMS"};
 
     public final static String NOTIFICATION_CHANNEL_SUBSCRIBE_DEFAULT = "notification_channel_subscribe_default";
 
@@ -91,7 +91,7 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setSubscribeIdentifyPattern(item.value());
                     break;
                 case Settings.SETTING_SUBSCRIBE_PRIORITY:
-                    mSettings.setSubscribePriority(Integer.parseInt(item.value()));
+                    mSettings.setSubscribePriority(Integer.parseInt(Objects.requireNonNull(item.value())));
                     break;
             }
         }

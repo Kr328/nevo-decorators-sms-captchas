@@ -34,11 +34,12 @@ import java.util.regex.Pattern;
 import me.kr328.nevo.decorators.smscaptcha.utils.CaptchaUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.MessageUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils;
+import me.kr328.nevo.decorators.smscaptcha.utils.PackageUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     public static final String TAG = CaptchaDecoratorService.class.getSimpleName();
-    public static final String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations"};
+    public static final String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations" ,"com.moez.QKSMS"};
 
     public static final String NOTIFICATION_CHANNEL_CAPTCHA_NORMAL = "notification_channel_captcha_normal";
     public static final String NOTIFICATION_CHANNEL_CAPTCHA_SILENT = "notification_channel_captcha_silent";
@@ -137,7 +138,8 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
             notificationChannels.add(channelSilent);
 
             for (String packageName : TARGET_PACKAGES)
-                createNotificationChannels(packageName, notificationChannels);
+                if (PackageUtils.hasPackageInstalled(this ,packageName))
+                    createNotificationChannels(packageName, notificationChannels);
         }
     }
 

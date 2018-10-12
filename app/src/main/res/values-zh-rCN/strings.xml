@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Nevo - 短信验证码通知增强</string>
+    <string name="captcha_service_name">短信验证码通知增强</string>
+    <string name="captcha_service_description">用于短信验证码复制和锁屏隐藏验证码</string>
+    <string name="captcha_service_notification_channel_name">包含验证码的消息</string>
+    <string name="captcha_service_notification_unlocked_action_copy_code_format">复制 %s</string>
+    <string name="captcha_service_notification_locked_action_copy_code">复制验证码</string>
+    <string name="captcha_service_toast_copied_format">%s 已复制到剪贴板</string>
+
+    <string name="subscribe_service_name">订阅类短信通知增强</string>
+    <string name="subscribe_service_description">用于降低订阅类短信通知优先级</string>
+    <string name="subscribe_service_notification_channel_name">订阅类短信</string>
+
+    <string name="setting_captcha">验证码类短信</string>
+    <string name="setting_captcha_hide_on_locked_title">锁屏时隐藏验证码</string>
+    <string name="setting_captcha_hide_on_locked_summary">在设备锁定时隐藏验证码</string>
+    <string name="setting_captcha_override_default_action">覆盖原有按钮</string>
+    <string name="setting_captcha_override_default_action_summary">覆盖短信通知原有按钮</string>
+    <string name="setting_captcha_use_default_pattern">使用内建正则表达式</string>
+    <string name="setting_captcha_use_default_pattern_summary">使用内建正则表达式识别验证码</string>
+    <string name="setting_captcha_post_copy_action">复制后操作</string>
+    <string name="setting_captcha_identify_pattern_title">自定义验证码识别表达式</string>
+    <string name="setting_captcha_identify_pattern_summary">识别消息存在验证码的正则表达式</string>
+    <string name="setting_captcha_parse_pattern_title">自定义验证码解析表达式</string>
+    <string name="setting_captcha_parse_pattern_summary">解析消息中的验证码的正则表达式</string>
+    <string name="setting_subscribe">订阅类短信</string>
+    <string name="setting_subscribe_identify_pattern">订阅识别表达式</string>
+    <string name="setting_subscribe_identify_pattern_summary">识别订阅类短信的正则表达式</string>
+    <string name="setting_subscribe_priority">通知优先级</string>
+    <string name="setting_subscribe_priority_summary_v26">您的ROM需要在通知设置中配置优先级</string>
+    <string name="setting_other">其他</string>
+    <string name="setting_hide_in_launcher_title">在启动器中隐藏图标</string>
+    <string name="setting_hide_in_launcher_summary">您仍然可以从Nevolution启动本界面</string>
+    <string name="setting_pattern_invalid">正则表达式无效</string>
+
+    <string name="default_value_identify_subscribe_pattern">.*(退|T).*</string>
+
+    <string name="permission_tips_title">需要授予短信写入权限</string>
+    <string name="permission_tips_content">因 Android 短信权限变动 需要额外操作授予写入权限</string>
+    <string name="permission_tips_cancel">我已了解</string>
+    <string name="permission_tips_help">查看帮助</string>
+
+    <string name="missing_nevolution_dialog_title">无法找到 Nevolution</string>
+    <string name="missing_nevolution_dialog_message">此应用依赖于 Nevolution 运行</string>
+    <string name="missing_nevolution_dialog_button">前往 PlayStore</string>
+
+    <string-array name="setting_captcha_post_copy_actions">
+        <item>不进行任何操作</item>
+        <item>复制后标记已读</item>
+        <item>复制后删除消息</item>
+    </string-array>
+
+    <string-array name="setting_subscribe_priorities">
+        <item>紧急</item>
+        <item>高</item>
+        <item>中</item>
+        <item>低</item>
+    </string-array>
+
+    <string name="permission_help_page_url">https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission_zh</string>
+</resources>
