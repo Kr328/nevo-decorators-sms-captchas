@@ -91,7 +91,7 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setSubscribeIdentifyPattern(item.value());
                     break;
                 case Settings.SETTING_SUBSCRIBE_PRIORITY:
-                    mSettings.setSubscribePriority(Integer.parseInt(item.value()));
+                    mSettings.setSubscribePriority(Integer.parseInt(Objects.requireNonNull(item.value())));
                     break;
             }
         }
