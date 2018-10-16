@@ -18,7 +18,7 @@ public class NotificationUtils {
             result.texts = style.getMessages().
                     stream().
                     map(NotificationCompat.MessagingStyle.Message::getText).
-                    toArray(String[]::new);
+                    toArray(CharSequence[]::new);
         }
         else {
             CharSequence message = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
