@@ -1,15 +1,13 @@
 package me.kr328.nevo.decorators.smscaptcha.utils;
 
 import android.app.Notification;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.app.NotificationCompat;
 
 import java.util.function.Function;
 
 public class NotificationUtils {
     public static class Messages {
-        public String[] texts;
+        public CharSequence[] texts;
     }
 
     public static Messages parseMessages(Notification notification) {

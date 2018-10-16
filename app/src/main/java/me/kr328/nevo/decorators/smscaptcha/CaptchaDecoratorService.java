@@ -237,7 +237,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                     mSettings.setCaptchaOverrideDefaultAction(Boolean.parseBoolean(item.value()));
                     break;
                 case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
-                    mSettings.setCaptchaPostCopyAction(Integer.parseInt(item.value()));
+                    mSettings.setCaptchaPostCopyAction(Integer.parseInt(Objects.requireNonNull(item.value())));
                     break;
 
             }
@@ -271,7 +271,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeInt(messages.texts.length);
 
-            for (String s : messages.texts) dest.writeString(s);
+            for (CharSequence s : messages.texts) dest.writeString(s.toString());
 
             dest.writeString(captcha);
         }

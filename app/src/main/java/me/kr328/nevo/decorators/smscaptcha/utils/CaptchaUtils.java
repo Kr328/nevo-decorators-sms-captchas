@@ -1,7 +1,5 @@
 package me.kr328.nevo.decorators.smscaptcha.utils;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,12 +27,12 @@ public class CaptchaUtils {
         return messageString;
     }
 
-    public String[] findSmsCaptchas(String[] messages) {
+    public String[] findSmsCaptchas(CharSequence[] messages) {
         if (messages == null) return new String[0];
 
         ArrayList<String> captchas = new ArrayList<>();
 
-        for ( String message : messages ) {
+        for ( CharSequence message : messages ) {
             if (!(customIdentifyPattern.matcher(message).matches() || ( useDefault && defaultIdentifyPattern.matcher(message).matches() )))
                 continue;
 
