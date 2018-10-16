@@ -1,5 +1,5 @@
 # Sms Captchas Decorator for Nevolution       
-Download prebuilt package from [Github releases](https://github.com/Kr328/nevo-decorators-sms-captcha/releases)
+Download prebuilt package from [Google Play](https://play.google.com/store/apps/details?id=me.kr328.nevo.decorators.smscaptcha) or [Github releases](https://github.com/Kr328/nevo-decorators-sms-captcha/releases)
 
 ## Introduction
 Enhance short message captcha notification with following features:
