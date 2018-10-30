@@ -1,6 +1,5 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;

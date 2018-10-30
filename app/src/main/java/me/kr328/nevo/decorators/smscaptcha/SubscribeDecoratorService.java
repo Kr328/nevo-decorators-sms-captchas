@@ -3,11 +3,6 @@ package me.kr328.nevo.decorators.smscaptcha;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,7 +11,6 @@ import android.util.Log;
 
 import com.oasisfeng.nevo.sdk.MutableNotification;
 import com.oasisfeng.nevo.sdk.MutableStatusBarNotification;
-import com.oasisfeng.nevo.sdk.NevoDecoratorService;
 
 import net.grandcentrix.tray.AppPreferences;
 import net.grandcentrix.tray.core.TrayItem;
