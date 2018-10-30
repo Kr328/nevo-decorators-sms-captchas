@@ -44,6 +44,13 @@
     <string name="missing_nevolution_dialog_message">This app relies on Nevolution. Must install it first.</string>
     <string name="missing_nevolution_dialog_button">Goto PlayStore</string>
 
+    <string name="setting_source">Source Code</string>
+    <string name="setting_source_summary">Source Code URL</string>
+    <string name="setting_source_url">https://github.com/Kr328/nevo-decorators-sms-captchas</string>
+    <string name="setting_privacy_policy">Privacy Policy</string>
+    <string name="setting_privacy_policy_summary">Privacy Policy URL</string>
+    <string name="setting_privacy_policy_url">https://kr328.github.io/nevo-decorators-sms-captchas/privacy_policy</string>
+
     <string-array name="setting_captcha_post_copy_actions">
         <item>Do nothing</item>
         <item>Mark As Read</item>

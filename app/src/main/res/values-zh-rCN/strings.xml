@@ -44,6 +44,13 @@
     <string name="missing_nevolution_dialog_message">此应用依赖于 Nevolution 运行</string>
     <string name="missing_nevolution_dialog_button">前往 PlayStore</string>
 
+    <string name="setting_source">源代码</string>
+    <string name="setting_source_summary">源代码链接</string>
+    <string name="setting_source_url">https://github.com/Kr328/nevo-decorators-sms-captchas</string>
+    <string name="setting_privacy_policy">隐私政策</string>
+    <string name="setting_privacy_policy_summary">隐私政策链接</string>
+    <string name="setting_privacy_policy_url">https://kr328.github.io/nevo-decorators-sms-captchas/privacy_policy</string>
+
     <string-array name="setting_captcha_post_copy_actions">
         <item>不进行任何操作</item>
         <item>复制后标记已读</item>

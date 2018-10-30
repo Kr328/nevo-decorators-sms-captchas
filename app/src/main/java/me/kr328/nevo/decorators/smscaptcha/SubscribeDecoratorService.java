@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import me.kr328.nevo.decorators.smscaptcha.utils.PackageUtils;
+
 public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     public final static String TAG = SubscribeDecoratorService.class.getSimpleName();
     public final static String[] TARGET_PACKAGES = new String[]{"com.android.messaging", "com.google.android.apps.messaging", "com.android.mms" ,"com.sonyericsson.conversations" ,"com.moez.QKSMS"};
@@ -100,7 +102,10 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
         ArrayList<NotificationChannel> notificationChannels = new ArrayList<>();
         notificationChannels.add(channel);
 
-        for (String packageName : TARGET_PACKAGES)
-            createNotificationChannels(packageName, notificationChannels);
+        for (String packageName : TARGET_PACKAGES) {
+            if (PackageUtils.hasPackageInstalled(this ,packageName))
+                createNotificationChannels(packageName, notificationChannels);
+        }
+
     }
 }

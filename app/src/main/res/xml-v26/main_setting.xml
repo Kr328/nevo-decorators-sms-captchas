@@ -58,5 +58,15 @@
             android:key="setting_hide_in_launcher"
             android:summary="@string/setting_hide_in_launcher_summary"
             android:title="@string/setting_hide_in_launcher_title" />
+        <Preference
+            android:title="@string/setting_privacy_policy"
+            android:summary="@string/setting_privacy_policy_summary">
+            <intent android:action="android.intent.action.VIEW" android:data="@string/setting_privacy_policy_url"/>
+        </Preference>
+        <Preference
+            android:title="@string/setting_source"
+            android:summary="@string/setting_source_summary">
+            <intent android:action="android.intent.action.VIEW" android:data="@string/setting_source_url"/>
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
