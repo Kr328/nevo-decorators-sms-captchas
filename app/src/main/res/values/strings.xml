@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Nevo - Enhanced SMS Captcha Notification</string>
+    <string name="app_name">Nevo - Enhanced SMS</string>
     <string name="captcha_service_name">SMS Captcha Service</string>
     <string name="captcha_service_description">Direct copy captcha on notification and hide captcha on lockscreen</string>
     <string name="captcha_service_notification_channel_name">SMS With Captcha</string>
