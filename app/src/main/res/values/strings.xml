@@ -16,16 +16,18 @@
     <string name="setting_captcha_hide_on_locked_summary">Hide the captcha when the device is locked</string>
     <string name="setting_captcha_override_default_action">Override original button</string>
     <string name="setting_captcha_override_default_action_summary">Overwrite SMS notification original button</string>
-    <string name="setting_captcha_use_default_pattern">Use built-in regular</string>
-    <string name="setting_captcha_use_default_pattern_summary">Use built-in regular to identify&amp;parse captchas</string>
+    <string name="setting_captcha_use_default_pattern">Use built-in regex</string>
+    <string name="setting_captcha_use_default_pattern_summary">Use built-in regex to identify&amp;parse captchas</string>
     <string name="setting_captcha_post_copy_action">Post-Copy action</string>
-    <string name="setting_captcha_identify_pattern_title">Custom captcha identify regular</string>
-    <string name="setting_captcha_identify_pattern_summary">Regular that check if SMS has cpatchas</string>
-    <string name="setting_captcha_parse_pattern_title">Custom captcha parse regular</string>
+    <string name="setting_captcha_identify_pattern_title">Custom captcha identify regex</string>
+    <string name="setting_captcha_identify_pattern_summary">Regex that check if SMS has cpatchas</string>
+    <string name="setting_captcha_parse_pattern_title">Custom captcha parse regex</string>
     <string name="setting_captcha_parse_pattern_summary">Parse captchas from the short message</string>
+    <string name="setting_captcha_auto_fill">Auto Fill</string>
+    <string name="setting_captcha_auto_fill_summary">Show a fill button when input method popup</string>
     <string name="setting_subscribe">Subscription</string>
-    <string name="setting_subscribe_identify_pattern">Subscription identify regular</string>
-    <string name="setting_subscribe_identify_pattern_summary">Regular that identify subscription-type text messages</string>
+    <string name="setting_subscribe_identify_pattern">Subscription identify regex</string>
+    <string name="setting_subscribe_identify_pattern_summary">Regex that identify subscription-type text messages</string>
     <string name="setting_subscribe_priority">Notification priority</string>
     <string name="setting_subscribe_priority_summary_v26">Your ROM needs to be configured with priority in the notification settings</string>
     <string name="setting_other">Other</string>
@@ -39,6 +41,11 @@
     <string name="permission_tips_content">Additional operations are required to grant SMS Write Permission (Not only click grant)</string>
     <string name="permission_tips_cancel">I already know</string>
     <string name="permission_tips_help">View help</string>
+
+    <string name="auto_fill_tips_title">Enable Accessibility Service</string>
+    <string name="auto_fill_tips_content">This function required\n   - Accessibility Service\n   - Display over other apps</string>
+    <string name="auto_fill_tips_cancel">Cancel</string>
+    <string name="auto_fill_tips_ok">OK</string>
 
     <string name="missing_nevolution_dialog_title">Missing Nevolution</string>
     <string name="missing_nevolution_dialog_message">This app relies on Nevolution. Must install it first.</string>

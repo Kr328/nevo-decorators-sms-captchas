@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.UserManager;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -89,7 +90,19 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         extras.putBoolean(Global.NOTIFICATION_EXTRA_APPLIED, true);
         mAppliedKeys.add(evolving.getKey());
 
+        if ( !recast )
+            sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_SHOW).
+                putExtra(Global.INTENT_NOTIFICATION_KEY ,evolving.getKey()).
+                putExtra(Global.INTENT_NOTIFICATION_CAPTCHA ,captchas[0]));
+
         Log.i(TAG, "Applied " + evolving.getKey());
+    }
+
+    @Override
+    protected void onNotificationRemoved(StatusBarNotification notification, int reason) {
+        super.onNotificationRemoved(notification, reason);
+
+        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL).putExtra(Global.INTENT_NOTIFICATION_KEY ,notification.getKey()));
     }
 
     private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages , String[] captchas) {

@@ -17,6 +17,11 @@
             android:key="setting_captcha_use_default_pattern"
             android:summary="@string/setting_captcha_use_default_pattern_summary"
             android:title="@string/setting_captcha_use_default_pattern" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="setting_captcha_auto_fill"
+            android:summary="@string/setting_captcha_auto_fill_summary"
+            android:title="@string/setting_captcha_auto_fill" />
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/setting_captcha_post_copy_actions"

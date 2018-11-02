@@ -29,6 +29,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private CheckBoxPreference mCaptchaHideOnLocked;
     private CheckBoxPreference mCaptchaOverrideDefaultAction;
+    private CheckBoxPreference mCaptchaUseDefaultPattern;
+    private CheckBoxPreference mCaptchaEnableAutoFill;
     private ListPreference     mCaptchaPostCopyAction;
     private EditTextPreference mCaptchaIdentifyPattern;
     private EditTextPreference mCaptchaParsePattern;
@@ -46,6 +48,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mCaptchaHideOnLocked           = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
         mCaptchaOverrideDefaultAction  = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION);
+        mCaptchaUseDefaultPattern      = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN);
+        
         mCaptchaPostCopyAction         = (ListPreference)     findPreference(Settings.SETTING_CAPTCHA_POST_COPY_ACTION);
         mCaptchaIdentifyPattern        = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
         mCaptchaParsePattern           = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
@@ -55,6 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaOverrideDefaultAction.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mCaptchaUseDefaultPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaPostCopyAction.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaIdentifyPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaParsePattern.setOnPreferenceChangeListener(this::onPreferenceChange);
@@ -145,6 +150,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void updateViews() {
         mCaptchaHideOnLocked.setChecked(mSettings.isCaptchaHideOnLocked());
         mCaptchaOverrideDefaultAction.setChecked(mSettings.isCaptchaOverrideDefaultAction());
+        mCaptchaUseDefaultPattern.setChecked(mSettings.isCaptchaUseDefaultPattern());
         mCaptchaPostCopyAction.setValue(String.valueOf(mSettings.getCaptchaPostCopyAction()));
         mCaptchaIdentifyPattern.setText(mSettings.getCaptchaIdentifyPattern());
         mCaptchaParsePattern.setText(mSettings.getCaptchaParsePattern());

@@ -10,5 +10,12 @@ public class Global {
 
     public final static String NOTIFICATION_EXTRA_APPLIED = PREFIX_NOTIFICATION_EXTRA + ".applied";
 
+    public final static String INTENT_CAPTCHA_NOTIFICATION_SHOW      = PREFIX_INTENT_ACTION + ".notification.show";
+    public final static String INTENT_CAPTCHA_NOTIFICATION_CANCEL    = PREFIX_INTENT_ACTION + ".notification.cancel";
+    public final static String INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL = PREFIX_INTENT_ACTION + ".notification.cancel.do";
+
+    public final static String INTENT_NOTIFICATION_KEY     = "key";
+    public final static String INTENT_NOTIFICATION_CAPTCHA = "captcha";
+
     public final static String NEVOLUTION_PACKAGE_NAME = "com.oasisfeng.nevo";
 }
