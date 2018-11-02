@@ -69,6 +69,6 @@
     <string name="setting_captcha_auto_fill_summary">输入法弹出时显示辅助填充按钮</string>
     <string name="auto_fill_tips_title">启用辅助输入服务</string>
     <string name="auto_fill_tips_content">此功能需要\\n   - 无障碍服务\\n   - 在其他应用上显示</string>
-    <string name="auto_fill_tips_cancel">取消</string>
     <string name="auto_fill_tips_ok">确认</string>
+    <string name="auto_fill_tips_enable_toast">启用 \"Nevo - 短信验证码通知增强\"</string>
 </resources>

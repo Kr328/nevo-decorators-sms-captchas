@@ -44,8 +44,8 @@
 
     <string name="auto_fill_tips_title">Enable Accessibility Service</string>
     <string name="auto_fill_tips_content">This function required\n   - Accessibility Service\n   - Display over other apps</string>
-    <string name="auto_fill_tips_cancel">Cancel</string>
     <string name="auto_fill_tips_ok">OK</string>
+    <string name="auto_fill_tips_enable_toast">Enable "Nevo - Enhanced SMS"</string>
 
     <string name="missing_nevolution_dialog_title">Missing Nevolution</string>
     <string name="missing_nevolution_dialog_message">This app relies on Nevolution. Must install it first.</string>
