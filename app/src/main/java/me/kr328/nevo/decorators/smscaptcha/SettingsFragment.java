@@ -202,12 +202,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void startAccessibility() {
-        if ( !android.provider.Settings.canDrawOverlays(requireContext()) )
+        if ( !android.provider.Settings.canDrawOverlays(requireContext()) ) {
             startActivityForResult(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION) ,REQUEST_DISPLAY_OVER_OTHER_CODE);
+            Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
+        }
         else {
             Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
             startActivity(intent);
+            Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
         }
     }
 
@@ -218,8 +220,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         switch (requestCode) {
             case REQUEST_DISPLAY_OVER_OTHER_CODE :
                 Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
                 startActivity(intent);
+                Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
                 break;
         }
     }

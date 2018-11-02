@@ -10,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -25,6 +26,7 @@ import com.oasisfeng.nevo.sdk.MutableStatusBarNotification;
 import net.grandcentrix.tray.AppPreferences;
 import net.grandcentrix.tray.core.TrayItem;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -62,6 +64,25 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         }
     };
 
+    private BroadcastReceiver mCancelNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key     = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
+            String captcha = intent.getStringExtra(Global.INTENT_NOTIFICATION_CAPTCHA);
+
+            switch (mSettings.getCaptchaPostCopyAction()) {
+                case Settings.POST_ACTION_DELETE :
+                    MessageUtils.delete(CaptchaDecoratorService.this ,captcha);
+                    break;
+                case Settings.POST_ACTION_MARK_AS_READ :
+                    MessageUtils.markAsRead(CaptchaDecoratorService.this ,captcha);
+                    break;
+            }
+
+            cancelNotification(key);
+        }
+    };
+
     @Override
     protected void apply(MutableStatusBarNotification evolving) {
         MutableNotification notification    = evolving.getNotification();
@@ -96,13 +117,6 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                 putExtra(Global.INTENT_NOTIFICATION_CAPTCHA ,captchas[0]));
 
         Log.i(TAG, "Applied " + evolving.getKey());
-    }
-
-    @Override
-    protected void onNotificationRemoved(StatusBarNotification notification, int reason) {
-        super.onNotificationRemoved(notification, reason);
-
-        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL).putExtra(Global.INTENT_NOTIFICATION_KEY ,notification.getKey()));
     }
 
     private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages , String[] captchas) {
@@ -206,15 +220,20 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
             addAction(Intent.ACTION_USER_PRESENT);
             addAction(Intent.ACTION_SCREEN_OFF);
         }});
+        registerReceiver(mCancelNotificationReceiver ,new IntentFilter(Global.INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL));
     }
 
     private void unregisterReceivers() {
         unregisterReceiver(mKeyguardReceiver);
+        unregisterReceiver(mCancelNotificationReceiver);
     }
 
     @Override
     protected void onNotificationRemoved(String key, int reason) {
         super.onNotificationRemoved(key ,reason);
+
+        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL).putExtra(Global.INTENT_NOTIFICATION_KEY ,key));
+
         mAppliedKeys.remove(key);
     }
 

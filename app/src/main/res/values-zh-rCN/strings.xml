@@ -71,4 +71,8 @@
     <string name="auto_fill_tips_content">此功能需要\\n   - 无障碍服务\\n   - 在其他应用上显示</string>
     <string name="auto_fill_tips_ok">确认</string>
     <string name="auto_fill_tips_enable_toast">"启用 Nevo - "</string>
+    <string name="auto_fill_service_name">\@string/app_name</string>
+    <string name="auto_fill_service_description">验证码辅助输入服务</string>
+    <string name="auto_fill_service_button_format">填充 %s</string>
+    <string name="auto_fill_service_not_able_find_node">无法找到输入焦点 请自行粘贴</string>
 </resources>

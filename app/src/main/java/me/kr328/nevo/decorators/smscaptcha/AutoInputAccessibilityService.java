@@ -3,6 +3,8 @@ package me.kr328.nevo.decorators.smscaptcha;
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,6 +21,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -96,7 +99,8 @@ public class AutoInputAccessibilityService extends AccessibilityService {
         AccessibilityNodeInfo node = findFocusedEditText(getRootInActiveWindow().findFocus(AccessibilityNodeInfo.FOCUS_INPUT));
 
         if ( node == null ) {
-
+            Toast.makeText(this ,R.string.auto_fill_service_not_able_find_node ,Toast.LENGTH_LONG).show();
+            Objects.requireNonNull(getSystemService(ClipboardManager.class)).setPrimaryClip(ClipData.newPlainText("captcha" ,currentCaptcha));
             return;
         }
 
@@ -104,6 +108,10 @@ public class AutoInputAccessibilityService extends AccessibilityService {
         bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE ,currentCaptcha);
 
         node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT ,bundle);
+
+        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL).
+                putExtra(Global.INTENT_NOTIFICATION_KEY ,currentKey).
+                putExtra(Global.INTENT_NOTIFICATION_CAPTCHA ,currentKey));
     }
 
     private AccessibilityNodeInfo findFocusedEditText(AccessibilityNodeInfo info) {
@@ -128,7 +136,7 @@ public class AutoInputAccessibilityService extends AccessibilityService {
     private void showFillButton() {
         if ( attached ) return;
 
-        pasteButton.setText(currentCaptcha);
+        pasteButton.setText(getString(R.string.auto_fill_service_button_format ,currentCaptcha));
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 

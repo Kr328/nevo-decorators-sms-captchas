@@ -56,8 +56,8 @@
             android:name=".AutoInputAccessibilityService"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:label="@string/app_name"
-            android:description="@string/app_name">
+            android:label="@string/auto_fill_service_name"
+            android:description="@string/auto_fill_service_description">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>

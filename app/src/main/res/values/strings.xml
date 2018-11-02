@@ -58,6 +58,11 @@
     <string name="setting_privacy_policy_summary">Privacy Policy URL</string>
     <string name="setting_privacy_policy_url">https://kr328.github.io/nevo-decorators-sms-captchas/privacy_policy</string>
 
+    <string name="auto_fill_service_name">@string/app_name</string>
+    <string name="auto_fill_service_description">Captcha auto input service.</string>
+    <string name="auto_fill_service_button_format">Fill %s</string>
+    <string name="auto_fill_service_not_able_find_node">Cannot find input focus, please paste yourself</string>
+
     <string-array name="setting_captcha_post_copy_actions">
         <item>Do nothing</item>
         <item>Mark As Read</item>
