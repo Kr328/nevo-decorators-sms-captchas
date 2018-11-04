@@ -42,7 +42,7 @@ public class AutoInputAccessibilityService extends AccessibilityService {
                 currentKey     = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
                 currentCaptcha = intent.getStringExtra(Global.INTENT_NOTIFICATION_CAPTCHA);
             }
-            else if ( Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL.equals(intent.getAction()) && currentKey.equals(intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY)) ) {
+            else if ( Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL.equals(intent.getAction()) && currentKey != null && currentKey.equals(intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY)) ) {
                 currentKey     = null;
                 currentCaptcha = null;
             }

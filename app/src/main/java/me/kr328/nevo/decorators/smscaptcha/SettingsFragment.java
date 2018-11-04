@@ -90,7 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private boolean onPreferenceChange(Preference preference, Object value) {
         String key = preference.getKey();
-        int valueInteger = 0;
+        int valueInteger;
 
         switch (key) {
             case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED:
@@ -142,10 +142,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private boolean onAutoFillClicked(Preference preference) {
-        AlertDialog dialog = new AlertDialog.Builder(requireContext()).
+        new AlertDialog.Builder(requireContext()).
                 setTitle(R.string.auto_fill_tips_title).
                 setMessage(R.string.auto_fill_tips_content).
-                setPositiveButton(R.string.auto_fill_tips_ok ,((dia, which) -> startAccessibility())).
+                setPositiveButton(R.string.auto_fill_tips_ok, ((dia, which) -> startAccessibility())).
                 show();
 
         return true;
