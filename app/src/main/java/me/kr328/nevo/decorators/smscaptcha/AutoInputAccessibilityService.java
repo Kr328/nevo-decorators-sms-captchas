@@ -159,14 +159,14 @@ public class AutoInputAccessibilityService extends AccessibilityService {
 
         layoutParams.format = PixelFormat.TRANSPARENT;
 
-        Objects.requireNonNull(getApplicationContext().getSystemService(WindowManager.class)).addView(floating ,layoutParams);
+        Objects.requireNonNull(getSystemService(WindowManager.class)).addView(floating ,layoutParams);
         attached = true;
     }
 
     private void hideFillButton() {
         if ( !attached ) return;
 
-        Objects.requireNonNull(getApplicationContext().getSystemService(WindowManager.class)).removeView(floating);
+        Objects.requireNonNull(getSystemService(WindowManager.class)).removeView(floating);
         attached = false;
     }
 }
