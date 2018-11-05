@@ -28,12 +28,12 @@ import java.util.Objects;
 public class AutoInputAccessibilityService extends AccessibilityService {
     public final static String TAG = AutoInputAccessibilityService.class.getSimpleName();
 
-    View     floating       = null;
-    TextView pasteButton    = null;
-    boolean  attached       = false;
-    boolean  inputPopped    = false;
-    String   currentKey     = null;
-    String   currentCaptcha = null;
+    View     floating          = null;
+    TextView pasteButton       = null;
+    boolean  attached          = false;
+    boolean  inputMethodPopped = false;
+    String   currentKey        = null;
+    String   currentCaptcha    = null;
 
     private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
@@ -77,12 +77,12 @@ public class AutoInputAccessibilityService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if ( event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.getPackageName() == null ) return;
 
-        inputPopped = false;
+        inputMethodPopped = false;
 
         for ( AccessibilityWindowInfo info : getWindows() ) {
             if ( info.getType() != AccessibilityWindowInfo.TYPE_INPUT_METHOD ) continue;
 
-            inputPopped = true;
+            inputMethodPopped = true;
         }
 
         updateFloating();
@@ -127,7 +127,7 @@ public class AutoInputAccessibilityService extends AccessibilityService {
     }
 
     private void updateFloating() {
-        if ( currentCaptcha != null && inputPopped )
+        if ( currentCaptcha != null && inputMethodPopped)
             showFillButton();
         else
             hideFillButton();
