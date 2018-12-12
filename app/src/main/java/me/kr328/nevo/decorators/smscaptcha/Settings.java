@@ -1,8 +1,11 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
+import android.app.Application;
 import android.content.Context;
 
+import net.grandcentrix.tray.AppPreferences;
 import net.grandcentrix.tray.TrayPreferences;
+import net.grandcentrix.tray.core.OnTrayPreferenceChangeListener;
 
 public class Settings {
     public final static String SETTING_CAPTCHA_HIDE_ON_LOCKED            = "setting_captcha_hide_on_locked";
@@ -27,7 +30,11 @@ public class Settings {
     private String  subscribeIdentifyPattern;
     private int     subscribePriority;
 
-    public Settings(boolean captchaHideOnLocked,boolean captchaOverrideDefaultAction ,int captchaPostCopyAction ,boolean captchaUseDefaultPattern,String captchaIdentifyPattern, String captchaParsePattern, String subscribeIdentifyPattern, int subscribePriority) {
+    private AppPreferences preferences;
+
+    private Settings(MainApplication application ,boolean captchaHideOnLocked,boolean captchaOverrideDefaultAction ,int captchaPostCopyAction ,boolean captchaUseDefaultPattern,String captchaIdentifyPattern, String captchaParsePattern, String subscribeIdentifyPattern, int subscribePriority) {
+        preferences = new AppPreferences(application);
+
         this.setCaptchaHideOnLocked(captchaHideOnLocked);
         this.setCaptchaOverrideDefaultAction(captchaOverrideDefaultAction);
         this.setCaptchaPostCopyAction(captchaPostCopyAction);
@@ -38,18 +45,18 @@ public class Settings {
         this.setSubscribePriority(subscribePriority);
     }
 
-    public static Settings defaultValueFromContext(Context context) {
-        return new Settings(true,
+    public Settings(MainApplication application) {
+        this(application ,true,
                 false ,
                 0 ,
                 true ,
                 "",
                 "",
-                context.getString(R.string.default_value_identify_subscribe_pattern),
+                application.getString(R.string.default_value_identify_subscribe_pattern),
                 -2);
     }
 
-    public Settings readFromTrayPreference(TrayPreferences preferences) {
+    public Settings readFromTrayPreference() {
         setCaptchaHideOnLocked(preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED, isCaptchaHideOnLocked()));
         setCaptchaOverrideDefaultAction(preferences.getBoolean(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,isCaptchaOverrideDefaultAction()));
         setCaptchaPostCopyAction(preferences.getInt(SETTING_CAPTCHA_POST_COPY_ACTION ,getCaptchaPostCopyAction()));
@@ -60,6 +67,14 @@ public class Settings {
         setSubscribePriority(preferences.getInt(SETTING_SUBSCRIBE_PRIORITY, getSubscribePriority()));
 
         return this;
+    }
+
+    public void registerSettingsChangedListener(OnTrayPreferenceChangeListener listener) {
+        preferences.registerOnTrayPreferenceChangeListener(listener);
+    }
+
+    public void unregisterSettingsChangedListener(OnTrayPreferenceChangeListener listener) {
+        preferences.unregisterOnTrayPreferenceChangeListener(listener);
     }
 
     public boolean isCaptchaHideOnLocked() {

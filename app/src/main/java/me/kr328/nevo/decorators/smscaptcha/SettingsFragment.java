@@ -1,7 +1,5 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
-import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,15 +13,12 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import java.util.List;
 import java.util.Objects;
 
-import me.kr328.nevo.decorators.smscaptcha.utils.AccessibilityUtils;
 import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 

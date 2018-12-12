@@ -61,7 +61,7 @@
     <string name="auto_fill_service_name">@string/app_name</string>
     <string name="auto_fill_service_description">Captcha auto input service.</string>
     <string name="auto_fill_service_button_format">Fill %s</string>
-    <string name="auto_fill_service_not_able_find_node">Cannot find input focus, please paste yourself</string>
+    <string name="auto_fill_service_not_able_find_node">Cannot find input focus, please paste by yourself</string>
 
     <string-array name="setting_captcha_post_copy_actions">
         <item>Do nothing</item>
