@@ -137,8 +137,6 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                 map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,new CaptchaMessage(messages ,captcha))).
                 toArray(Notification.Action[]::new);
 
-        NotificationUtils.rebuildMessageStyle(notification);
-
         if ( mSettings.isCaptchaOverrideDefaultAction() )
             replaceActions(notification ,key ,actions);
         else
