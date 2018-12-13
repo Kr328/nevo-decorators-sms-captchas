@@ -1,13 +1,17 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 
 import net.grandcentrix.tray.AppPreferences;
 import net.grandcentrix.tray.TrayPreferences;
 import net.grandcentrix.tray.core.OnTrayPreferenceChangeListener;
 
-public class Settings {
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class Settings extends SettingsBase {
     public final static String SETTING_CAPTCHA_HIDE_ON_LOCKED            = "setting_captcha_hide_on_locked";
     public final static String SETTING_CAPTCHA_IDENTIFY_PATTERN          = "setting_captcha_identify_pattern";
     public final static String SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION   = "setting_captcha_override_default_action";
@@ -30,33 +34,17 @@ public class Settings {
     private String  subscribeIdentifyPattern;
     private int     subscribePriority;
 
-    private AppPreferences preferences;
-
-    private Settings(MainApplication application ,boolean captchaHideOnLocked,boolean captchaOverrideDefaultAction ,int captchaPostCopyAction ,boolean captchaUseDefaultPattern,String captchaIdentifyPattern, String captchaParsePattern, String subscribeIdentifyPattern, int subscribePriority) {
-        preferences = new AppPreferences(application);
-
-        this.setCaptchaHideOnLocked(captchaHideOnLocked);
-        this.setCaptchaOverrideDefaultAction(captchaOverrideDefaultAction);
-        this.setCaptchaPostCopyAction(captchaPostCopyAction);
-        this.setCaptchaUseDefaultPattern(captchaUseDefaultPattern);
-        this.setCaptchaIdentifyPattern(captchaIdentifyPattern);
-        this.setCaptchaParsePattern(captchaParsePattern);
-        this.setSubscribeIdentifyPattern(subscribeIdentifyPattern);
-        this.setSubscribePriority(subscribePriority);
-    }
-
     public Settings(MainApplication application) {
-        this(application ,true,
-                false ,
-                0 ,
-                true ,
-                "",
-                "",
-                application.getString(R.string.default_value_identify_subscribe_pattern),
-                -2);
+        super(application);
     }
 
-    public Settings readFromTrayPreference() {
+    @Override
+    protected void defaultValue(Context context) {
+
+    }
+
+    @Override
+    protected void readFromTrayPreferences(TrayPreferences preferences) {
         setCaptchaHideOnLocked(preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED, isCaptchaHideOnLocked()));
         setCaptchaOverrideDefaultAction(preferences.getBoolean(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,isCaptchaOverrideDefaultAction()));
         setCaptchaPostCopyAction(preferences.getInt(SETTING_CAPTCHA_POST_COPY_ACTION ,getCaptchaPostCopyAction()));
@@ -65,16 +53,11 @@ public class Settings {
         setCaptchaParsePattern(preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN, getCaptchaParsePattern()));
         setSubscribeIdentifyPattern(preferences.getString(SETTING_SUBSCRIBE_IDENTIFY_PATTERN, getSubscribeIdentifyPattern()));
         setSubscribePriority(preferences.getInt(SETTING_SUBSCRIBE_PRIORITY, getSubscribePriority()));
-
-        return this;
     }
 
-    public void registerSettingsChangedListener(OnTrayPreferenceChangeListener listener) {
-        preferences.registerOnTrayPreferenceChangeListener(listener);
-    }
+    @Override
+    protected void onSettingsChanged(String key, String value) {
 
-    public void unregisterSettingsChangedListener(OnTrayPreferenceChangeListener listener) {
-        preferences.unregisterOnTrayPreferenceChangeListener(listener);
     }
 
     public boolean isCaptchaHideOnLocked() {
