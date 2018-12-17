@@ -1,8 +1,10 @@
 package me.kr328.nevo.decorators.smscaptcha;
 
 import android.app.Application;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 
 import net.grandcentrix.tray.AppPreferences;
 import net.grandcentrix.tray.TrayPreferences;
@@ -38,26 +40,64 @@ public class Settings extends SettingsBase {
         super(application);
     }
 
+    public static Settings fromApplication(Application application) {
+        if ( application instanceof MainApplication )
+            return ((MainApplication) application).getSettings();
+        throw new IllegalArgumentException("");
+    }
+
     @Override
     protected void defaultValue(Context context) {
-
+        captchaHideOnLocked = true;
+        captchaOverrideDefaultAction = false;
+        captchaPostCopyAction = POST_ACTION_NONE;
+        captchaUseDefaultPattern = true;
+        captchaIdentifyPattern = "";
+        captchaParsePattern = "";
+        subscribeIdentifyPattern = context.getString(R.string.default_value_identify_subscribe_pattern);
+        subscribePriority = Notification.PRIORITY_MIN;
     }
 
     @Override
     protected void readFromTrayPreferences(TrayPreferences preferences) {
-        setCaptchaHideOnLocked(preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED, isCaptchaHideOnLocked()));
-        setCaptchaOverrideDefaultAction(preferences.getBoolean(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,isCaptchaOverrideDefaultAction()));
-        setCaptchaPostCopyAction(preferences.getInt(SETTING_CAPTCHA_POST_COPY_ACTION ,getCaptchaPostCopyAction()));
-        setCaptchaUseDefaultPattern(preferences.getBoolean(SETTING_CAPTCHA_USE_DEFAULT_PATTERN ,true));
-        setCaptchaIdentifyPattern(preferences.getString(SETTING_CAPTCHA_IDENTIFY_PATTERN, getCaptchaIdentifyPattern()));
-        setCaptchaParsePattern(preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN, getCaptchaParsePattern()));
-        setSubscribeIdentifyPattern(preferences.getString(SETTING_SUBSCRIBE_IDENTIFY_PATTERN, getSubscribeIdentifyPattern()));
-        setSubscribePriority(preferences.getInt(SETTING_SUBSCRIBE_PRIORITY, getSubscribePriority()));
+        captchaHideOnLocked          = preferences.getBoolean(SETTING_CAPTCHA_HIDE_ON_LOCKED, captchaHideOnLocked);
+        captchaOverrideDefaultAction = preferences.getBoolean(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,captchaOverrideDefaultAction);
+        captchaPostCopyAction        = preferences.getInt(SETTING_CAPTCHA_POST_COPY_ACTION ,captchaPostCopyAction);
+        captchaUseDefaultPattern     = preferences.getBoolean(SETTING_CAPTCHA_USE_DEFAULT_PATTERN ,captchaUseDefaultPattern);
+        captchaIdentifyPattern       = preferences.getString(SETTING_CAPTCHA_IDENTIFY_PATTERN, captchaIdentifyPattern);
+        captchaParsePattern          = preferences.getString(SETTING_CAPTCHA_PARSE_PATTERN, captchaParsePattern);
+        subscribeIdentifyPattern     = preferences.getString(SETTING_SUBSCRIBE_IDENTIFY_PATTERN, subscribeIdentifyPattern);
+        subscribePriority            = preferences.getInt(SETTING_SUBSCRIBE_PRIORITY, subscribePriority);
     }
 
     @Override
     protected void onSettingsChanged(String key, String value) {
-
+        switch (key) {
+            case SETTING_CAPTCHA_HIDE_ON_LOCKED :
+                this.captchaHideOnLocked = Boolean.valueOf(value);
+                break;
+            case SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION :
+                this.captchaOverrideDefaultAction = Boolean.valueOf(value);
+                break;
+            case SETTING_CAPTCHA_POST_COPY_ACTION :
+                this.captchaPostCopyAction = Integer.valueOf(value);
+                break;
+            case SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
+                this.captchaUseDefaultPattern = Boolean.valueOf(value);
+                break;
+            case SETTING_CAPTCHA_IDENTIFY_PATTERN :
+                this.captchaIdentifyPattern = value;
+                break;
+            case SETTING_CAPTCHA_PARSE_PATTERN :
+                this.captchaParsePattern = value;
+                break;
+            case SETTING_SUBSCRIBE_IDENTIFY_PATTERN :
+                this.subscribeIdentifyPattern = value;
+                break;
+            case SETTING_SUBSCRIBE_PRIORITY :
+                this.subscribePriority = Integer.valueOf(value);
+                break;
+        }
     }
 
     public boolean isCaptchaHideOnLocked() {
@@ -65,7 +105,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaHideOnLocked(boolean captchaHideOnLocked) {
-        this.captchaHideOnLocked = captchaHideOnLocked;
+        getPreference().put(SETTING_CAPTCHA_HIDE_ON_LOCKED ,captchaHideOnLocked);
     }
 
     public String getCaptchaIdentifyPattern() {
@@ -73,7 +113,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaIdentifyPattern(String captchaIdentifyPattern) {
-        this.captchaIdentifyPattern = captchaIdentifyPattern;
+        getPreference().put(SETTING_CAPTCHA_IDENTIFY_PATTERN ,captchaIdentifyPattern);
     }
 
     public String getCaptchaParsePattern() {
@@ -81,7 +121,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaParsePattern(String captchaParsePattern) {
-        this.captchaParsePattern = captchaParsePattern;
+        getPreference().put(SETTING_CAPTCHA_PARSE_PATTERN ,captchaParsePattern);
     }
 
     public String getSubscribeIdentifyPattern() {
@@ -89,7 +129,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setSubscribeIdentifyPattern(String subscribeIdentifyPattern) {
-        this.subscribeIdentifyPattern = subscribeIdentifyPattern;
+        getPreference().put(SETTING_SUBSCRIBE_IDENTIFY_PATTERN ,subscribeIdentifyPattern);
     }
 
     public int getSubscribePriority() {
@@ -97,7 +137,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setSubscribePriority(int subscribePriority) {
-        this.subscribePriority = subscribePriority;
+        getPreference().put(SETTING_SUBSCRIBE_PRIORITY ,subscribePriority);
     }
 
     public boolean isCaptchaOverrideDefaultAction() {
@@ -105,7 +145,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaOverrideDefaultAction(boolean captchaOverrideDefaultAction) {
-        this.captchaOverrideDefaultAction = captchaOverrideDefaultAction;
+        getPreference().put(SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION ,captchaOverrideDefaultAction);
     }
 
     public int getCaptchaPostCopyAction() {
@@ -113,7 +153,7 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaPostCopyAction(int captchaPostCopyAction) {
-        this.captchaPostCopyAction = captchaPostCopyAction;
+        getPreference().put(SETTING_CAPTCHA_POST_COPY_ACTION ,captchaPostCopyAction);
     }
 
     public boolean isCaptchaUseDefaultPattern() {
@@ -121,6 +161,6 @@ public class Settings extends SettingsBase {
     }
 
     public void setCaptchaUseDefaultPattern(boolean captchaUseDefaultPattern) {
-        this.captchaUseDefaultPattern = captchaUseDefaultPattern;
+        getPreference().put(SETTING_CAPTCHA_USE_DEFAULT_PATTERN ,captchaUseDefaultPattern);
     }
 }

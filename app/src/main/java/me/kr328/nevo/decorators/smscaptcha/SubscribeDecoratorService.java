@@ -59,38 +59,12 @@ public class SubscribeDecoratorService extends BaseSmsDecoratorService {
     }
 
     @Override
-    public void onUserUnlocked() {
-        this.loadSettings();
-    }
-
-    @Override
     public void onActionClicked(String key ,Parcelable cookies) {
 
     }
 
     public void loadSettings() {
-        if ( Objects.requireNonNull(getSystemService(UserManager.class)).isUserUnlocked() ) {
-            AppPreferences mAppPreference = new AppPreferences(this);
-            mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreference);
-
-            mAppPreference.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
-        }
-        else {
-            mSettings = Settings.defaultValueFromContext(createDeviceProtectedStorageContext());
-        }
-    }
-
-    private void onSettingsChanged(Collection<TrayItem> trayItems) {
-        for (TrayItem item : trayItems) {
-            switch (item.key()) {
-                case Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN:
-                    mSettings.setSubscribeIdentifyPattern(item.value());
-                    break;
-                case Settings.SETTING_SUBSCRIBE_PRIORITY:
-                    mSettings.setSubscribePriority(Integer.parseInt(Objects.requireNonNull(item.value())));
-                    break;
-            }
-        }
+        mSettings = Settings.fromApplication(getApplication());
     }
 
     private void createNotificationChannels() {

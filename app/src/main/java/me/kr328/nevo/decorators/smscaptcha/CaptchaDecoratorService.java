@@ -144,13 +144,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     private void loadSettings() {
-        if (Objects.requireNonNull(getSystemService(UserManager.class)).isUserUnlocked()) {
-            AppPreferences mAppPreferences = new AppPreferences(this);
-            mSettings = Settings.defaultValueFromContext(this).readFromTrayPreference(mAppPreferences);
-            mAppPreferences.registerOnTrayPreferenceChangeListener(this::onSettingsChanged);
-        } else {
-            mSettings = Settings.defaultValueFromContext(createDeviceProtectedStorageContext());
-        }
+        mSettings = Settings.fromApplication(getApplication());
     }
 
     private void createNotificationChannels() {
@@ -196,11 +190,6 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         }
 
         Toast.makeText(this, getString(R.string.captcha_service_toast_copied_format, captcha), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onUserUnlocked() {
-        this.loadSettings();
     }
 
     @Override

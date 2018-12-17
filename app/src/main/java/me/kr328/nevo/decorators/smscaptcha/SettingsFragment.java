@@ -41,7 +41,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference         mSubscribePriority;
     private CheckBoxPreference mHideInLauncher;
 
-    private AppPreferences     mAppPreferences;
     private Settings           mSettings;
 
     @Override
@@ -90,41 +89,33 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         switch (key) {
             case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED:
                 mSettings.setCaptchaHideOnLocked((Boolean) value);
-                mAppPreferences.put(key, (Boolean) value);
                 break;
             case Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION :
                 mSettings.setCaptchaOverrideDefaultAction((Boolean) value);
-                mAppPreferences.put(key ,(Boolean) value);
                 break;
             case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
                 mSettings.setCaptchaUseDefaultPattern((Boolean) value);
-                mAppPreferences.put(key ,(Boolean) value);
                 break;
             case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
                 valueInteger = Integer.parseInt((String) value);
                 mSettings.setCaptchaPostCopyAction(valueInteger);
-                mAppPreferences.put(key ,valueInteger);
                 showPermissionTips(valueInteger);
                 break;
             case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
                 mSettings.setCaptchaIdentifyPattern((String) value);
-                mAppPreferences.put(key, (String) value);
                 break;
             case Settings.SETTING_CAPTCHA_PARSE_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
                 mSettings.setCaptchaParsePattern((String) value);
-                mAppPreferences.put(key, (String) value);
                 break;
             case Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
                 mSettings.setSubscribeIdentifyPattern((String) value);
-                mAppPreferences.put(key, (String) value);
                 break;
             case Settings.SETTING_SUBSCRIBE_PRIORITY:
                 valueInteger = Integer.parseInt((String) value);
                 mSettings.setSubscribePriority(valueInteger);
-                mAppPreferences.put(key, valueInteger);
                 break;
             case KEY_HIDE_IN_LAUNCHER:
                 new Thread(() -> updateMainActivityEnabled(!(Boolean)value)).start();
@@ -155,12 +146,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void loadSettingsAndUpdateViews() {
-        mAppPreferences = new AppPreferences(Objects.requireNonNull(getActivity()));
-        mSettings = Settings.defaultValueFromContext(getActivity()).readFromTrayPreference(mAppPreferences);
-        getActivity().runOnUiThread(this::updateViews);
+        mSettings = Settings.fromApplication(requireActivity().getApplication());
+        requireActivity().runOnUiThread(this::updateViews);
 
-        boolean isActivityHidden = getActivity().getPackageManager().getComponentEnabledSetting(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".MainActivity")) == PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-        getActivity().runOnUiThread(() -> mHideInLauncher.setChecked(isActivityHidden));
+        boolean isActivityHidden = requireActivity().getPackageManager().getComponentEnabledSetting(new ComponentName(BuildConfig.APPLICATION_ID, BuildConfig.APPLICATION_ID + ".MainActivity")) == PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        requireActivity().runOnUiThread(() -> mHideInLauncher.setChecked(isActivityHidden));
     }
 
     private void updateViews() {
