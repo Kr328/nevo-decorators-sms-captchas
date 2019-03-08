@@ -2,15 +2,19 @@ package me.kr328.nevo.decorators.smscaptcha;
 
 import android.app.KeyguardManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import com.oasisfeng.nevo.sdk.MutableNotification;
 import com.oasisfeng.nevo.sdk.MutableStatusBarNotification;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -31,6 +36,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     public static final String TAG = CaptchaDecoratorService.class.getSimpleName();
 
     public static final String NOTIFICATION_EXTRA_RECAST = Global.PREFIX_NOTIFICATION_EXTRA + ".captcha.notification.recast";
+    public static final String CAPTCHA_NOTIFICATION_CHANNEL_ID = "captcha_notification_channel";
 
     private Settings mSettings;
     private CaptchaUtils mCaptchaUtils;
@@ -64,14 +70,14 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
         String[] captchas = mCaptchaUtils.findSmsCaptchas(messages.texts);
 
-        Log.i(TAG, "apply begin");
-
         Stream.of(messages).forEach((msg) -> Stream.of(msg.texts).forEach((c) -> Log.i(TAG, "Message " + c)));
 
         if (captchas.length == 0) {
             Log.i(TAG, "Captcha not found.");
             return;
         }
+
+        //createAndSetNotificationChannelForPackage(evolving.getPackageName() ,notification);
 
         if (mSettings.isCaptchaHideOnLocked()) {
             KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
@@ -81,7 +87,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
                 applyKeyguardUnlocked(notification, evolving.getKey(), messages, captchas);
             notification.visibility = Notification.VISIBILITY_PUBLIC;
         } else {
-            applyKeyguardLocked(notification, evolving.getKey(), messages, captchas);
+            applyKeyguardUnlocked(notification, evolving.getKey(), messages, captchas);
         }
 
         notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
@@ -118,6 +124,20 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
             replaceActions(notification, key, actions);
         else
             appendActions(notification, key, actions);
+    }
+
+    private void createAndSetNotificationChannelForPackage(String pkg, MutableNotification notification) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            return;
+
+        createNotificationChannels(pkg,
+                Process.myUserHandle(),
+                Collections.singletonList(
+                        new NotificationChannel(CAPTCHA_NOTIFICATION_CHANNEL_ID,
+                                getString(R.string.captcha_service_notification_channel_name),
+                                NotificationManager.IMPORTANCE_HIGH)));
+
+        notification.setChannelId(CAPTCHA_NOTIFICATION_CHANNEL_ID);
     }
 
     private void loadSettings() {

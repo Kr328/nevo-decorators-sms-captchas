@@ -3,6 +3,7 @@ package me.kr328.nevo.decorators.smscaptcha.utils;
 import android.app.Notification;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -39,6 +40,7 @@ public class NotificationUtils {
                     .map(m -> (Bundle) m)
                     .filter(m -> m.containsKey(MESSAGING_STYLE_KEY_TEXT))
                     .forEach(m -> m.putCharSequence(MESSAGING_STYLE_KEY_TEXT, replacer.apply(m.getCharSequence(MESSAGING_STYLE_KEY_TEXT))));
+            notification.extras.putParcelableArray(Notification.EXTRA_MESSAGES ,messages.clone());
         }
 
         if (notification.extras.containsKey(Notification.EXTRA_TEXT))

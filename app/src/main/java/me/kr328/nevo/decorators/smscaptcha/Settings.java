@@ -5,6 +5,8 @@ import android.content.Context;
 
 import net.grandcentrix.tray.TrayPreferences;
 
+import androidx.annotation.NonNull;
+
 public class Settings extends SettingsBase {
     public final static String SETTING_CAPTCHA_HIDE_ON_LOCKED = "setting_captcha_hide_on_locked";
     public final static String SETTING_CAPTCHA_IDENTIFY_PATTERN = "setting_captcha_identify_pattern";
