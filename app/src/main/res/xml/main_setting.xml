@@ -34,8 +34,11 @@
             android:singleLine="true"
             android:summary="@string/setting_captcha_parse_pattern_summary"
             android:title="@string/setting_captcha_parse_pattern_title" />
+        <Preference
+            android:key="setting_captcha_attach_application"
+            android:title="@string/setting_captcha_attach_application"
+            android:summary="@string/setting_captcha_attach_application_summary"/>
     </PreferenceCategory>
-
     <PreferenceCategory
         android:layout_height="match_parent"
         android:title="@string/setting_other">

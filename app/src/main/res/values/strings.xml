@@ -22,15 +22,11 @@
     <string name="setting_captcha_auto_fill">Auto Fill</string>
     <string name="setting_captcha_auto_fill_summary">Show a fill button when input method popup</string>
     <string name="setting_captcha_attach_application">Attach Application</string>
+    <string name="setting_captcha_attach_application_summary">Attach decorator to an application</string>
     <string name="setting_other">Other</string>
     <string name="setting_hide_in_launcher_title">Hide on launcher</string>
     <string name="setting_hide_in_launcher_summary">You can still launch this interface from Nevolution</string>
     <string name="setting_pattern_invalid">Invalid Regular</string>
-
-    <string name="permission_tips_title">Need SMS Write Permission</string>
-    <string name="permission_tips_content">Additional operations are required to grant SMS Write Permission (Not only click grant)</string>
-    <string name="permission_tips_cancel">I already know</string>
-    <string name="permission_tips_help">View help</string>
 
     <string name="auto_fill_tips_title">Enable Accessibility Service</string>
     <string name="auto_fill_tips_content">This function required\n   - Accessibility Service\n   - Display over other apps</string>

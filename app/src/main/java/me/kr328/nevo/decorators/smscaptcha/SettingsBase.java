@@ -15,14 +15,14 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public abstract class SettingsBase {
-    protected abstract void defaultValue(Context context);
-    protected abstract void readFromTrayPreferences(TrayPreferences preferences);
-    protected abstract void onSettingsChanged(String key , String value);
+    private MainApplication application;
+    private AppPreferences preferences;
+    private HashSet<SettingsChangedListener> listeners;
 
     SettingsBase(MainApplication application) {
         this.application = application;
         this.preferences = null;
-        this.listeners   = new HashSet<>();
+        this.listeners = new HashSet<>();
 
         notifyLoadSettings();
 
@@ -31,8 +31,14 @@ public abstract class SettingsBase {
             public void onReceive(Context context, Intent intent) {
                 notifyLoadSettings();
             }
-        },new IntentFilter(Intent.ACTION_USER_UNLOCKED));
+        }, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
     }
+
+    protected abstract void defaultValue(Context context);
+
+    protected abstract void readFromTrayPreferences(TrayPreferences preferences);
+
+    protected abstract void onSettingsChanged(String key, String value);
 
     public void registerSettingsChangedListener(SettingsChangedListener listener) {
         listeners.add(listener);
@@ -49,33 +55,28 @@ public abstract class SettingsBase {
     private void notifyLoadSettings() {
         defaultValue(application);
 
-        if ( Objects.requireNonNull(application.getSystemService(UserManager.class)).isUserUnlocked() ) {
+        if (Objects.requireNonNull(application.getSystemService(UserManager.class)).isUserUnlocked()) {
             initAppPreference();
             readFromTrayPreferences(preferences);
-        }
-        else {
+        } else {
             preferences = null;
         }
     }
 
     private synchronized void initAppPreference() {
-        if ( preferences != null )
+        if (preferences != null)
             return;
         preferences = new AppPreferences(application);
         preferences.registerOnTrayPreferenceChangeListener(this::onChanged);
     }
 
     private void onChanged(Collection<TrayItem> items) {
-        for ( SettingsChangedListener listener : listeners ) {
+        for (SettingsChangedListener listener : listeners) {
             items.stream()
-                    .peek((item) -> onSettingsChanged(item.key() ,item.value()))
+                    .peek((item) -> onSettingsChanged(item.key(), item.value()))
                     .forEach((item) -> listener.onChanged(item.key()));
         }
     }
-
-    private MainApplication application;
-    private AppPreferences preferences;
-    private HashSet<SettingsChangedListener> listeners;
 
     public interface SettingsChangedListener {
         void onChanged(String key);

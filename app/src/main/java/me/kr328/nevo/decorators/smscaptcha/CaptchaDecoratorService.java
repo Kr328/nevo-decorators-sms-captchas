@@ -50,7 +50,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     private BroadcastReceiver mCancelNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String key     = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
+            String key = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
 
             cancelNotification(key);
         }
@@ -58,68 +58,66 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     @Override
     protected void apply(MutableStatusBarNotification evolving) {
-        MutableNotification notification    = evolving.getNotification();
-        Bundle              extras          = notification.extras;
-        boolean             recast          = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false);
+        MutableNotification notification = evolving.getNotification();
+        Bundle extras = notification.extras;
+        boolean recast = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false);
         NotificationUtils.Messages messages = NotificationUtils.parseMessages(notification);
-        String[]            captchas        = mCaptchaUtils.findSmsCaptchas(messages.texts);
+        String[] captchas = mCaptchaUtils.findSmsCaptchas(messages.texts);
 
-        Log.i(TAG ,"apply begin");
+        Log.i(TAG, "apply begin");
 
-        Stream.of(messages).forEach((msg) -> Stream.of(msg.texts).forEach((c) -> Log.i(TAG ,"Message " + c)));
+        Stream.of(messages).forEach((msg) -> Stream.of(msg.texts).forEach((c) -> Log.i(TAG, "Message " + c)));
 
         if (captchas.length == 0) {
-            Log.i(TAG ,"Captcha not found.");
+            Log.i(TAG, "Captcha not found.");
             return;
         }
 
-        if ( mSettings.isCaptchaHideOnLocked() ) {
+        if (mSettings.isCaptchaHideOnLocked()) {
             KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
             if (keyguardManager != null && keyguardManager.isKeyguardLocked())
                 applyKeyguardLocked(notification, evolving.getKey(), messages, captchas);
             else
                 applyKeyguardUnlocked(notification, evolving.getKey(), messages, captchas);
             notification.visibility = Notification.VISIBILITY_PUBLIC;
-        }
-        else {
+        } else {
             applyKeyguardLocked(notification, evolving.getKey(), messages, captchas);
         }
 
-        notification.flags     |= Notification.FLAG_ONLY_ALERT_ONCE;
-
+        notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
 
         mAppliedKeys.add(evolving.getKey());
 
-        if ( !recast )
+        if (!recast)
             sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_SHOW).
-                putExtra(Global.INTENT_NOTIFICATION_KEY ,evolving.getKey()).
-                putExtra(Global.INTENT_NOTIFICATION_CAPTCHA ,captchas[0]));
+                    putExtra(Global.INTENT_NOTIFICATION_KEY, evolving.getKey()).
+                    putExtra(Global.INTENT_NOTIFICATION_CAPTCHA, captchas[0]));
 
         Log.i(TAG, "Applied " + evolving.getKey());
     }
 
-    private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages , String[] captchas) {
-        Notification.Action[] actions = new Notification.Action[] {
-                createNonIconAction(key ,getString(R.string.captcha_service_notification_locked_action_copy_code) ,new CaptchaMessage(messages ,captchas[0]))
+    private void applyKeyguardLocked(Notification notification, String key, NotificationUtils.Messages messages, String[] captchas) {
+        Notification.Action[] actions = new Notification.Action[]{
+                createNonIconAction(key, getString(R.string.captcha_service_notification_locked_action_copy_code), new CaptchaMessage(messages, captchas[0]))
         };
 
-        NotificationUtils.replaceMessages(notification ,text -> CaptchaUtils.replaceCaptchaWithChar(text ,captchas ,'*'));
+        NotificationUtils.replaceMessages(notification, text -> CaptchaUtils.replaceCaptchaWithChar(text, captchas, '*'));
 
-        if ( mSettings.isCaptchaOverrideDefaultAction() )
-            replaceActions(notification ,key ,actions);
+        if (mSettings.isCaptchaOverrideDefaultAction())
+            replaceActions(notification, key, actions);
         else
-            appendActions(notification ,key ,actions);
+            appendActions(notification, key, actions);
     }
 
     private void applyKeyguardUnlocked(Notification notification, String key, NotificationUtils.Messages messages, String[] captchas) {
         Notification.Action[] actions = Arrays.stream(captchas).
-                map(captcha -> createNonIconAction(key ,getString(R.string.captcha_service_notification_unlocked_action_copy_code_format ,captcha) ,new CaptchaMessage(messages ,captcha))).
+                map(captcha -> createNonIconAction(key, getString(R.string.captcha_service_notification_unlocked_action_copy_code_format, captcha), new CaptchaMessage(messages, captcha))).
                 toArray(Notification.Action[]::new);
 
-        if ( mSettings.isCaptchaOverrideDefaultAction() )
-            replaceActions(notification ,key ,actions);
+        if (mSettings.isCaptchaOverrideDefaultAction())
+            replaceActions(notification, key, actions);
         else
-            appendActions(notification ,key ,actions);
+            appendActions(notification, key, actions);
     }
 
     private void loadSettings() {
@@ -127,11 +125,11 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     private void initCaptchaUtils() {
-        mCaptchaUtils = new CaptchaUtils(mSettings.isCaptchaUseDefaultPattern() ,
-                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), "" ,Pattern.CASE_INSENSITIVE),
-                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), "" ,Pattern.CASE_INSENSITIVE));
+        mCaptchaUtils = new CaptchaUtils(mSettings.isCaptchaUseDefaultPattern(),
+                PatternUtils.compilePattern(mSettings.getCaptchaIdentifyPattern(), "", Pattern.CASE_INSENSITIVE),
+                PatternUtils.compilePattern(mSettings.getCaptchaParsePattern(), "", Pattern.CASE_INSENSITIVE));
 
-        Log.d(TAG ,"CaptchaUtils " + mSettings.isCaptchaUseDefaultPattern() + " " + mSettings.getCaptchaIdentifyPattern() + " " + mSettings.getCaptchaParsePattern());
+        Log.d(TAG, "CaptchaUtils " + mSettings.isCaptchaUseDefaultPattern() + " " + mSettings.getCaptchaIdentifyPattern() + " " + mSettings.getCaptchaParsePattern());
     }
 
     private void recastAllNotifications(Bundle fillInExtras) {
@@ -140,7 +138,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
         mAppliedKeys.clear();
     }
 
-    private void copyCaptcha(String captcha , NotificationUtils.Messages messages) {
+    private void copyCaptcha(String captcha, NotificationUtils.Messages messages) {
         ((ClipboardManager) Objects.requireNonNull(getSystemService(Context.CLIPBOARD_SERVICE))).
                 setPrimaryClip(ClipData.newPlainText("SmsCaptcha", captcha));
 
@@ -148,13 +146,13 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     @Override
-    public void onActionClicked(String key ,Parcelable cookies) {
+    public void onActionClicked(String key, Parcelable cookies) {
         CaptchaMessage captchaMessage = (CaptchaMessage) cookies;
 
-        if ( captchaMessage == null )
+        if (captchaMessage == null)
             return;
 
-        copyCaptcha(captchaMessage.captcha ,captchaMessage.messages);
+        copyCaptcha(captchaMessage.captcha, captchaMessage.messages);
     }
 
     private void registerReceivers() {
@@ -162,7 +160,7 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
             addAction(Intent.ACTION_USER_PRESENT);
             addAction(Intent.ACTION_SCREEN_OFF);
         }});
-        registerReceiver(mCancelNotificationReceiver ,new IntentFilter(Global.INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL));
+        registerReceiver(mCancelNotificationReceiver, new IntentFilter(Global.INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL));
     }
 
     private void unregisterReceivers() {
@@ -172,9 +170,9 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
     @Override
     protected void onNotificationRemoved(String key, int reason) {
-        super.onNotificationRemoved(key ,reason);
+        super.onNotificationRemoved(key, reason);
 
-        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL).putExtra(Global.INTENT_NOTIFICATION_KEY ,key));
+        sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL).putExtra(Global.INTENT_NOTIFICATION_KEY, key));
 
         mAppliedKeys.remove(key);
     }
@@ -196,12 +194,29 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
     }
 
     static class CaptchaMessage implements Parcelable {
+        public static final Creator<CaptchaMessage> CREATOR = new Creator<CaptchaMessage>() {
+            @Override
+            public CaptchaMessage createFromParcel(Parcel source) {
+                NotificationUtils.Messages messages = new NotificationUtils.Messages();
+                messages.texts = new String[source.readInt()];
+
+                for (int i = 0; i < messages.texts.length; i++)
+                    messages.texts[i] = source.readString();
+
+                return new CaptchaMessage(messages, source.readString());
+            }
+
+            @Override
+            public CaptchaMessage[] newArray(int size) {
+                return new CaptchaMessage[size];
+            }
+        };
         NotificationUtils.Messages messages;
-        String                     captcha;
+        String captcha;
 
         CaptchaMessage(NotificationUtils.Messages messages, String captcha) {
             this.messages = messages;
-            this.captcha  = captcha;
+            this.captcha = captcha;
         }
 
         @Override
@@ -217,23 +232,6 @@ public class CaptchaDecoratorService extends BaseSmsDecoratorService {
 
             dest.writeString(captcha);
         }
-
-        public static final Creator<CaptchaMessage> CREATOR = new Creator<CaptchaMessage>() {
-            @Override
-            public CaptchaMessage createFromParcel(Parcel source) {
-                NotificationUtils.Messages messages = new NotificationUtils.Messages();
-                messages.texts = new String[source.readInt()];
-
-                for ( int i = 0 ; i < messages.texts.length ; i++ ) messages.texts[i] = source.readString();
-
-                return new CaptchaMessage(messages ,source.readString());
-            }
-
-            @Override
-            public CaptchaMessage[] newArray(int size) {
-                return new CaptchaMessage[size];
-            }
-        };
     }
 }
 

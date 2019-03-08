@@ -28,22 +28,21 @@ import java.util.Objects;
 public class AutoInputAccessibilityService extends AccessibilityService {
     public final static String TAG = AutoInputAccessibilityService.class.getSimpleName();
 
-    View     floating          = null;
-    TextView pasteButton       = null;
-    boolean  attached          = false;
-    boolean  inputMethodPopped = false;
-    String   currentKey        = null;
-    String   currentCaptcha    = null;
+    View floating = null;
+    TextView pasteButton = null;
+    boolean attached = false;
+    boolean inputMethodPopped = false;
+    String currentKey = null;
+    String currentCaptcha = null;
 
     private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if ( Global.INTENT_CAPTCHA_NOTIFICATION_SHOW.equals(intent.getAction()) ) {
-                currentKey     = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
+            if (Global.INTENT_CAPTCHA_NOTIFICATION_SHOW.equals(intent.getAction())) {
+                currentKey = intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY);
                 currentCaptcha = intent.getStringExtra(Global.INTENT_NOTIFICATION_CAPTCHA);
-            }
-            else if ( Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL.equals(intent.getAction()) && currentKey != null && currentKey.equals(intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY)) ) {
-                currentKey     = null;
+            } else if (Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL.equals(intent.getAction()) && currentKey != null && currentKey.equals(intent.getStringExtra(Global.INTENT_NOTIFICATION_KEY))) {
+                currentKey = null;
                 currentCaptcha = null;
             }
 
@@ -56,14 +55,15 @@ public class AutoInputAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        floating    = LayoutInflater.from(this).inflate(R.layout.floating_view ,null);
+        floating = LayoutInflater.from(this).inflate(R.layout.floating_view, null);
         pasteButton = floating.findViewById(R.id.paste);
 
         pasteButton.setOnClickListener(v -> handlePasteButtonClicked());
 
-        registerReceiver(mNotificationReceiver ,new IntentFilter(){{
+        registerReceiver(mNotificationReceiver, new IntentFilter() {{
             addAction(Global.INTENT_CAPTCHA_NOTIFICATION_CANCEL);
-            addAction(Global.INTENT_CAPTCHA_NOTIFICATION_SHOW);}});
+            addAction(Global.INTENT_CAPTCHA_NOTIFICATION_SHOW);
+        }});
     }
 
     @Override
@@ -75,12 +75,13 @@ public class AutoInputAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if ( event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.getPackageName() == null ) return;
+        if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.getPackageName() == null)
+            return;
 
         inputMethodPopped = false;
 
-        for ( AccessibilityWindowInfo info : getWindows() ) {
-            if ( info.getType() != AccessibilityWindowInfo.TYPE_INPUT_METHOD ) continue;
+        for (AccessibilityWindowInfo info : getWindows()) {
+            if (info.getType() != AccessibilityWindowInfo.TYPE_INPUT_METHOD) continue;
 
             inputMethodPopped = true;
         }
@@ -90,60 +91,60 @@ public class AutoInputAccessibilityService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-        Log.i(TAG ,"Interrupted");
+        Log.i(TAG, "Interrupted");
     }
 
     private void handlePasteButtonClicked() {
-        if ( currentCaptcha == null ) return;
+        if (currentCaptcha == null) return;
 
         AccessibilityNodeInfo node = findFocusedEditText(getRootInActiveWindow().findFocus(AccessibilityNodeInfo.FOCUS_INPUT));
 
-        if ( node == null ) {
-            Toast.makeText(this ,R.string.auto_fill_service_not_able_find_node ,Toast.LENGTH_LONG).show();
-            Objects.requireNonNull(getSystemService(ClipboardManager.class)).setPrimaryClip(ClipData.newPlainText("captcha" ,currentCaptcha));
+        if (node == null) {
+            Toast.makeText(this, R.string.auto_fill_service_not_able_find_node, Toast.LENGTH_LONG).show();
+            Objects.requireNonNull(getSystemService(ClipboardManager.class)).setPrimaryClip(ClipData.newPlainText("captcha", currentCaptcha));
             return;
         }
 
         Bundle bundle = new Bundle();
-        bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE ,currentCaptcha);
+        bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, currentCaptcha);
 
-        node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT ,bundle);
+        node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle);
 
         sendBroadcast(new Intent(Global.INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL).
-                putExtra(Global.INTENT_NOTIFICATION_KEY ,currentKey).
-                putExtra(Global.INTENT_NOTIFICATION_CAPTCHA ,currentKey));
+                putExtra(Global.INTENT_NOTIFICATION_KEY, currentKey).
+                putExtra(Global.INTENT_NOTIFICATION_CAPTCHA, currentKey));
     }
 
     private AccessibilityNodeInfo findFocusedEditText(AccessibilityNodeInfo info) {
-        if ( EditText.class.getName().contentEquals(info.getClassName()) && info.isFocused() )
+        if (EditText.class.getName().contentEquals(info.getClassName()) && info.isFocused())
             return info;
 
-        for ( int i = 0 ; i < info.getChildCount() ; i++ ) {
+        for (int i = 0; i < info.getChildCount(); i++) {
             AccessibilityNodeInfo result = findFocusedEditText(info.getChild(i));
-            if ( result != null ) return result;
+            if (result != null) return result;
         }
 
         return null;
     }
 
     private void updateFloating() {
-        if ( currentCaptcha != null && inputMethodPopped)
+        if (currentCaptcha != null && inputMethodPopped)
             showFillButton();
         else
             hideFillButton();
     }
 
     private void showFillButton() {
-        if ( attached ) return;
+        if (attached) return;
 
-        pasteButton.setText(getString(R.string.auto_fill_service_button_format ,currentCaptcha));
+        pasteButton.setText(getString(R.string.auto_fill_service_button_format, currentCaptcha));
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 
         layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
         layoutParams.x = 0;
         layoutParams.y = 0;
-        layoutParams.width  = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.windowAnimations = android.R.style.Animation_Translucent;
 
@@ -159,12 +160,12 @@ public class AutoInputAccessibilityService extends AccessibilityService {
 
         layoutParams.format = PixelFormat.TRANSPARENT;
 
-        Objects.requireNonNull(getSystemService(WindowManager.class)).addView(floating ,layoutParams);
+        Objects.requireNonNull(getSystemService(WindowManager.class)).addView(floating, layoutParams);
         attached = true;
     }
 
     private void hideFillButton() {
-        if ( !attached ) return;
+        if (!attached) return;
 
         Objects.requireNonNull(getSystemService(WindowManager.class)).removeView(floating);
         attached = false;

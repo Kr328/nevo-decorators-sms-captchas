@@ -19,33 +19,36 @@ import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 public class SettingsFragment extends PreferenceFragmentCompat {
     public final static String TAG = SettingsFragment.class.getSimpleName();
 
-    public final static int    REQUEST_DISPLAY_OVER_OTHER_CODE = 21;
+    public final static int REQUEST_DISPLAY_OVER_OTHER_CODE = 21;
 
     public final static String KEY_HIDE_IN_LAUNCHER = "setting_hide_in_launcher";
     public final static String KEY_ENABLE_AUTO_FILL = "setting_captcha_enable_auto_fill";
+    public final static String KEY_ATTACH_APPLICATION = "setting_captcha_attach_application";
 
     private CheckBoxPreference mCaptchaHideOnLocked;
     private CheckBoxPreference mCaptchaOverrideDefaultAction;
     private CheckBoxPreference mCaptchaUseDefaultPattern;
-    private Preference         mCaptchaEnableAutoFill;
+    private Preference mCaptchaEnableAutoFill;
     private EditTextPreference mCaptchaIdentifyPattern;
     private EditTextPreference mCaptchaParsePattern;
+    private Preference mCaptchaAttachApplication;
     private CheckBoxPreference mHideInLauncher;
 
-    private Settings           mSettings;
+    private Settings mSettings;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.main_setting);
         getPreferenceScreen().setEnabled(false);
 
-        mCaptchaHideOnLocked           = findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
-        mCaptchaOverrideDefaultAction  = findPreference(Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION);
-        mCaptchaUseDefaultPattern      = findPreference(Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN);
-        mCaptchaEnableAutoFill         = findPreference(KEY_ENABLE_AUTO_FILL);
-        mCaptchaIdentifyPattern        = findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
-        mCaptchaParsePattern           = findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
-        mHideInLauncher                = findPreference(KEY_HIDE_IN_LAUNCHER);
+        mCaptchaHideOnLocked = findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
+        mCaptchaOverrideDefaultAction = findPreference(Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION);
+        mCaptchaUseDefaultPattern = findPreference(Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN);
+        mCaptchaEnableAutoFill = findPreference(KEY_ENABLE_AUTO_FILL);
+        mCaptchaIdentifyPattern = findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
+        mCaptchaParsePattern = findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
+        mCaptchaAttachApplication = findPreference(KEY_ATTACH_APPLICATION);
+        mHideInLauncher = findPreference(KEY_HIDE_IN_LAUNCHER);
 
         mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaOverrideDefaultAction.setOnPreferenceChangeListener(this::onPreferenceChange);
@@ -53,6 +56,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mCaptchaEnableAutoFill.setOnPreferenceClickListener(this::onAutoFillClicked);
         mCaptchaIdentifyPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaParsePattern.setOnPreferenceChangeListener(this::onPreferenceChange);
+        mCaptchaAttachApplication.setOnPreferenceClickListener(this::onAttachApplicationClicked);
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
 
         new Thread(this::loadSettingsAndUpdateViews).start();
@@ -65,10 +69,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED:
                 mSettings.setCaptchaHideOnLocked((Boolean) value);
                 break;
-            case Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION :
+            case Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION:
                 mSettings.setCaptchaOverrideDefaultAction((Boolean) value);
                 break;
-            case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
+            case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN:
                 mSettings.setCaptchaUseDefaultPattern((Boolean) value);
                 break;
             case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN:
@@ -80,9 +84,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 mSettings.setCaptchaParsePattern((String) value);
                 break;
             case KEY_HIDE_IN_LAUNCHER:
-                new Thread(() -> updateMainActivityEnabled(!(Boolean)value)).start();
+                new Thread(() -> updateMainActivityEnabled(!(Boolean) value)).start();
                 break;
-            case KEY_ENABLE_AUTO_FILL :
+            case KEY_ENABLE_AUTO_FILL:
 
         }
 
@@ -99,9 +103,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return true;
     }
 
+    private boolean onAttachApplicationClicked(Preference preference) {
+        Intent intent = new Intent(requireActivity(), AttachApplicationActivity.class);
+        startActivity(intent);
+
+        return true;
+    }
+
     private boolean checkPatternInvalidAndMakeToast(String pattern) {
         if (!PatternUtils.checkPatternValid(pattern)) {
-            Toast.makeText(this.getActivity() ,R.string.setting_pattern_invalid ,Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), R.string.setting_pattern_invalid, Toast.LENGTH_LONG).show();
             return true;
         }
         return false;
@@ -134,14 +145,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void startAccessibility() {
-        if ( !android.provider.Settings.canDrawOverlays(requireContext()) ) {
-            startActivityForResult(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION) ,REQUEST_DISPLAY_OVER_OTHER_CODE);
-            Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
-        }
-        else {
+        if (!android.provider.Settings.canDrawOverlays(requireContext())) {
+            startActivityForResult(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION), REQUEST_DISPLAY_OVER_OTHER_CODE);
+            Toast.makeText(requireContext(), R.string.auto_fill_tips_enable_toast, Toast.LENGTH_LONG).show();
+        } else {
             Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
-            Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), R.string.auto_fill_tips_enable_toast, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -150,10 +160,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case REQUEST_DISPLAY_OVER_OTHER_CODE :
+            case REQUEST_DISPLAY_OVER_OTHER_CODE:
                 Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 startActivity(intent);
-                Toast.makeText(requireContext() ,R.string.auto_fill_tips_enable_toast ,Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), R.string.auto_fill_tips_enable_toast, Toast.LENGTH_LONG).show();
                 break;
         }
     }

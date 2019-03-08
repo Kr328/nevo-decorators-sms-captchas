@@ -24,19 +24,18 @@ public class SettingsActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary ,getTheme()));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary, getTheme()));
     }
 
     private void detectNevolution() {
-        if ( PackageUtils.getPackageVersionCode(this ,Global.NEVOLUTION_PACKAGE_NAME) < 30000 ) {
+        if (PackageUtils.getPackageVersionCode(this, Global.NEVOLUTION_PACKAGE_NAME) < 30000) {
             runOnUiThread(() -> new AlertDialog.Builder(this).
                     setTitle(R.string.nevolution_invalid_dialog_title).
                     setMessage(R.string.nevolution_invalid_dialog_message).
                     setOnDismissListener(dialog -> this.finish()).
-                    setPositiveButton(R.string.nevolution_invalid_dialog_button,(dialog , i) -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=" + Global.NEVOLUTION_PACKAGE_NAME)))).
+                    setPositiveButton(R.string.nevolution_invalid_dialog_button, (dialog, i) -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=" + Global.NEVOLUTION_PACKAGE_NAME)))).
                     show());
-        }
-        else {
+        } else {
             runOnUiThread(() -> setContentView(R.layout.main_layout));
         }
     }

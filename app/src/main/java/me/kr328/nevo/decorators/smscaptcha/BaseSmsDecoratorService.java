@@ -27,7 +27,7 @@ public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
             String key = intent.getStringExtra(INTENT_EXTRA_NOTIFICATION_KEY);
             Parcelable cookies = intent.getParcelableExtra(INTENT_EXTRA_COOKIES);
 
-            BaseSmsDecoratorService.this.onActionClicked(key ,cookies);
+            BaseSmsDecoratorService.this.onActionClicked(key, cookies);
 
             cancelNotification(key);
         }
@@ -68,7 +68,7 @@ public abstract class BaseSmsDecoratorService extends NevoDecoratorService {
         unregisterReceiver(mActionProxyReceiver);
     }
 
-    public abstract void onActionClicked(String key ,Parcelable cookies);
+    public abstract void onActionClicked(String key, Parcelable cookies);
 
     protected Notification.Action createNonIconAction(String key, String title, Parcelable cookies) {
         Icon icon = Icon.createWithResource(this, R.drawable.ic_empty);

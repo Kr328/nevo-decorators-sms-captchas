@@ -67,6 +67,13 @@
             </intent-filter>
         </activity-alias>
 
+        <activity
+            android:name=".AttachApplicationActivity"
+            android:label="@string/setting_captcha_attach_application"
+            android:enabled="true"
+            android:launchMode="singleTask">
+        </activity>
+
         <receiver
             android:name=".SettingsReceiver"
             android:exported="true"

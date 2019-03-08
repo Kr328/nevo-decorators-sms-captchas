@@ -14,11 +14,11 @@ public class PatternUtils {
         return true;
     }
 
-    public static Pattern compilePattern(String pattern, String def ,int flags) {
+    public static Pattern compilePattern(String pattern, String def, int flags) {
         try {
-            return Pattern.compile(pattern ,flags);
+            return Pattern.compile(pattern, flags);
         } catch (PatternSyntaxException ignored) {
         }
-        return Pattern.compile(def ,flags);
+        return Pattern.compile(def, flags);
     }
 }

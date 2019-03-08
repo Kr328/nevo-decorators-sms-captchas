@@ -3,6 +3,8 @@ package me.kr328.nevo.decorators.smscaptcha;
 import android.app.Application;
 
 public class MainApplication extends Application {
+    private Settings settings;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -13,6 +15,4 @@ public class MainApplication extends Application {
     public Settings getSettings() {
         return settings;
     }
-
-    private Settings settings;
 }
