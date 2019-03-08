@@ -19,7 +19,7 @@ public abstract class SettingsBase {
     protected abstract void readFromTrayPreferences(TrayPreferences preferences);
     protected abstract void onSettingsChanged(String key , String value);
 
-    protected SettingsBase(MainApplication application) {
+    SettingsBase(MainApplication application) {
         this.application = application;
         this.preferences = null;
         this.listeners   = new HashSet<>();

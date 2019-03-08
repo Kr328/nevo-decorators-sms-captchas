@@ -3,22 +3,16 @@ package me.kr328.nevo.decorators.smscaptcha;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
-
-import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Objects;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import me.kr328.nevo.decorators.smscaptcha.utils.PatternUtils;
 
 
@@ -34,11 +28,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private CheckBoxPreference mCaptchaOverrideDefaultAction;
     private CheckBoxPreference mCaptchaUseDefaultPattern;
     private Preference         mCaptchaEnableAutoFill;
-    private ListPreference     mCaptchaPostCopyAction;
     private EditTextPreference mCaptchaIdentifyPattern;
     private EditTextPreference mCaptchaParsePattern;
-    private EditTextPreference mSubscribeIdentityPattern;
-    private Preference         mSubscribePriority;
     private CheckBoxPreference mHideInLauncher;
 
     private Settings           mSettings;
@@ -48,43 +39,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.main_setting);
         getPreferenceScreen().setEnabled(false);
 
-        mCaptchaHideOnLocked           = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
-        mCaptchaOverrideDefaultAction  = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION);
-        mCaptchaUseDefaultPattern      = (CheckBoxPreference) findPreference(Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN);
-        mCaptchaEnableAutoFill         =                      findPreference(KEY_ENABLE_AUTO_FILL);
-        mCaptchaPostCopyAction         = (ListPreference)     findPreference(Settings.SETTING_CAPTCHA_POST_COPY_ACTION);
-        mCaptchaIdentifyPattern        = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
-        mCaptchaParsePattern           = (EditTextPreference) findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
-        mSubscribeIdentityPattern      = (EditTextPreference) findPreference(Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN);
-        mSubscribePriority             =                      findPreference(Settings.SETTING_SUBSCRIBE_PRIORITY);
-        mHideInLauncher                = (CheckBoxPreference) findPreference(KEY_HIDE_IN_LAUNCHER);
+        mCaptchaHideOnLocked           = findPreference(Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED);
+        mCaptchaOverrideDefaultAction  = findPreference(Settings.SETTING_CAPTCHA_OVERRIDE_DEFAULT_ACTION);
+        mCaptchaUseDefaultPattern      = findPreference(Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN);
+        mCaptchaEnableAutoFill         = findPreference(KEY_ENABLE_AUTO_FILL);
+        mCaptchaIdentifyPattern        = findPreference(Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN);
+        mCaptchaParsePattern           = findPreference(Settings.SETTING_CAPTCHA_PARSE_PATTERN);
+        mHideInLauncher                = findPreference(KEY_HIDE_IN_LAUNCHER);
 
         mCaptchaHideOnLocked.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaOverrideDefaultAction.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaUseDefaultPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaEnableAutoFill.setOnPreferenceClickListener(this::onAutoFillClicked);
-        mCaptchaPostCopyAction.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaIdentifyPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mCaptchaParsePattern.setOnPreferenceChangeListener(this::onPreferenceChange);
-        mSubscribeIdentityPattern.setOnPreferenceChangeListener(this::onPreferenceChange);
         mHideInLauncher.setOnPreferenceChangeListener(this::onPreferenceChange);
-        mSubscribePriority.setOnPreferenceChangeListener(this::onPreferenceChange);
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            mSubscribePriority.setOnPreferenceClickListener((Preference p) -> {
-                startActivity(
-                        new Intent("android.settings.APP_NOTIFICATION_SETTINGS").
-                                putExtra("android.provider.extra.APP_PACKAGE" , Global.NEVOLUTION_PACKAGE_NAME));
-                return false;
-            });
-        }
 
         new Thread(this::loadSettingsAndUpdateViews).start();
     }
 
     private boolean onPreferenceChange(Preference preference, Object value) {
         String key = preference.getKey();
-        int valueInteger;
 
         switch (key) {
             case Settings.SETTING_CAPTCHA_HIDE_ON_LOCKED:
@@ -96,11 +71,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             case Settings.SETTING_CAPTCHA_USE_DEFAULT_PATTERN :
                 mSettings.setCaptchaUseDefaultPattern((Boolean) value);
                 break;
-            case Settings.SETTING_CAPTCHA_POST_COPY_ACTION :
-                valueInteger = Integer.parseInt((String) value);
-                mSettings.setCaptchaPostCopyAction(valueInteger);
-                showPermissionTips(valueInteger);
-                break;
             case Settings.SETTING_CAPTCHA_IDENTIFY_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
                 mSettings.setCaptchaIdentifyPattern((String) value);
@@ -108,14 +78,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             case Settings.SETTING_CAPTCHA_PARSE_PATTERN:
                 if (checkPatternInvalidAndMakeToast((String) value)) return false;
                 mSettings.setCaptchaParsePattern((String) value);
-                break;
-            case Settings.SETTING_SUBSCRIBE_IDENTIFY_PATTERN:
-                if (checkPatternInvalidAndMakeToast((String) value)) return false;
-                mSettings.setSubscribeIdentifyPattern((String) value);
-                break;
-            case Settings.SETTING_SUBSCRIBE_PRIORITY:
-                valueInteger = Integer.parseInt((String) value);
-                mSettings.setSubscribePriority(valueInteger);
                 break;
             case KEY_HIDE_IN_LAUNCHER:
                 new Thread(() -> updateMainActivityEnabled(!(Boolean)value)).start();
@@ -157,25 +119,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mCaptchaHideOnLocked.setChecked(mSettings.isCaptchaHideOnLocked());
         mCaptchaOverrideDefaultAction.setChecked(mSettings.isCaptchaOverrideDefaultAction());
         mCaptchaUseDefaultPattern.setChecked(mSettings.isCaptchaUseDefaultPattern());
-        mCaptchaPostCopyAction.setValue(String.valueOf(mSettings.getCaptchaPostCopyAction()));
         mCaptchaIdentifyPattern.setText(mSettings.getCaptchaIdentifyPattern());
         mCaptchaParsePattern.setText(mSettings.getCaptchaParsePattern());
-        mSubscribeIdentityPattern.setText(mSettings.getSubscribeIdentifyPattern());
-
-        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.O )
-            ((ListPreference)mSubscribePriority).setValue(String.valueOf(mSettings.getSubscribePriority()));
 
         getPreferenceScreen().setEnabled(true);
-    }
-
-    private void showPermissionTips(int postAction) {
-        if (postAction == Settings.POST_ACTION_NONE) return;
-
-        new AlertDialog.Builder(requireContext()).
-                setTitle(R.string.permission_tips_title).
-                setMessage(R.string.permission_tips_content).
-                setPositiveButton(R.string.permission_tips_help ,(dialogInterface, i) -> new CustomTabsIntent.Builder().build().launchUrl(requireContext() ,Uri.parse(getString(R.string.permission_help_page_url)))).
-                create().show();
     }
 
     private void updateMainActivityEnabled(boolean enabled) {

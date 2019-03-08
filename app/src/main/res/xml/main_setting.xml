@@ -22,13 +22,6 @@
             android:key="setting_captcha_enable_auto_fill"
             android:summary="@string/setting_captcha_auto_fill_summary"
             android:title="@string/setting_captcha_auto_fill" />
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/setting_captcha_post_copy_actions"
-            android:entryValues="@array/setting_captcha_post_copy_action_values"
-            android:key="setting_captcha_post_copy_action"
-            android:summary="dynamic"
-            android:title="@string/setting_captcha_post_copy_action" />
         <EditTextPreference
             android:key="setting_captcha_identify_pattern"
             android:selectAllOnFocus="true"
@@ -42,22 +35,7 @@
             android:summary="@string/setting_captcha_parse_pattern_summary"
             android:title="@string/setting_captcha_parse_pattern_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/setting_subscribe">
-        <EditTextPreference
-            android:defaultValue="@string/default_value_identify_subscribe_pattern"
-            android:key="setting_subscribe_identify_pattern"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:summary="@string/setting_subscribe_identify_pattern_summary"
-            android:title="@string/setting_subscribe_identify_pattern" />
-        <ListPreference
-            android:defaultValue="-2"
-            android:entries="@array/setting_subscribe_priorities"
-            android:entryValues="@array/setting_subscribe_priority_values"
-            android:key="setting_subscribe_priority"
-            android:summary="%s"
-            android:title="@string/setting_subscribe_priority" />
-    </PreferenceCategory>
+
     <PreferenceCategory
         android:layout_height="match_parent"
         android:title="@string/setting_other">

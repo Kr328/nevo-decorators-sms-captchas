@@ -1,16 +1,20 @@
 package me.kr328.nevo.decorators.smscaptcha.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 public class PackageUtils {
-    public static boolean hasPackageInstalled(Context context ,String packageName) {
+    public static long getPackageVersionCode(Context context ,String packageName) {
         try {
-            context.getPackageManager().getApplicationInfo(packageName ,0);
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName ,0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                return packageInfo.getLongVersionCode();
+            else
+                return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            return false;
+            return -1;
         }
-
-        return true;
     }
 }

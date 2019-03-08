@@ -3,7 +3,6 @@ package me.kr328.nevo.decorators.smscaptcha.utils;
 import android.app.Notification;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.NotificationCompat;
 
 import java.util.Objects;
 import java.util.function.Function;

@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import me.kr328.nevo.decorators.smscaptcha.utils.PackageUtils;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -28,12 +28,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void detectNevolution() {
-        if ( !PackageUtils.hasPackageInstalled(this ,Global.NEVOLUTION_PACKAGE_NAME) ) {
+        if ( PackageUtils.getPackageVersionCode(this ,Global.NEVOLUTION_PACKAGE_NAME) < 30000 ) {
             runOnUiThread(() -> new AlertDialog.Builder(this).
-                    setTitle(R.string.missing_nevolution_dialog_title).
-                    setMessage(R.string.missing_nevolution_dialog_message).
+                    setTitle(R.string.nevolution_invalid_dialog_title).
+                    setMessage(R.string.nevolution_invalid_dialog_message).
                     setOnDismissListener(dialog -> this.finish()).
-                    setPositiveButton(R.string.missing_nevolution_dialog_button ,(dialog ,i) -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=" + Global.NEVOLUTION_PACKAGE_NAME)))).
+                    setPositiveButton(R.string.nevolution_invalid_dialog_button,(dialog , i) -> startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=" + Global.NEVOLUTION_PACKAGE_NAME)))).
                     show());
         }
         else {

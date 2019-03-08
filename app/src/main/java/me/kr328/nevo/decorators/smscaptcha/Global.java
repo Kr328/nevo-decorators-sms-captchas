@@ -8,8 +8,6 @@ public class Global {
     public final static String PREFIX_NOTIFICATION = PREFIX + ".notification";
     public final static String PREFIX_NOTIFICATION_EXTRA = PREFIX_NOTIFICATION + ".extra";
 
-    public final static String NOTIFICATION_EXTRA_APPLIED = PREFIX_NOTIFICATION_EXTRA + ".applied";
-
     public final static String INTENT_CAPTCHA_NOTIFICATION_SHOW      = PREFIX_INTENT_ACTION + ".notification.show";
     public final static String INTENT_CAPTCHA_NOTIFICATION_CANCEL    = PREFIX_INTENT_ACTION + ".notification.cancel";
     public final static String INTENT_CAPTCHA_NOTIFICATION_DO_CANCEL = PREFIX_INTENT_ACTION + ".notification.cancel.do";

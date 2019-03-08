@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.kr328.nevo.decorators.smscaptcha">
 
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -29,25 +27,7 @@
 
             <meta-data
                 android:name="packages"
-                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms|com.sonyericsson.conversations|com.moez.QKSMS" />
-            <meta-data
-                android:name="settings.receiver"
-                android:value="SettingsReceiver" />
-        </service>
-        <service
-            android:name=".SubscribeDecoratorService"
-            android:description="@string/subscribe_service_description"
-            android:label="@string/subscribe_service_name"
-            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
-            android:directBootAware="true"
-            android:process="com.oasisfeng.nevo.decorators">
-            <intent-filter android:priority="6">
-                <action android:name="com.oasisfeng.nevo.Decorator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="packages"
-                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms|com.sonyericsson.conversations|com.moez.QKSMS" />
+                android:value=""/>
             <meta-data
                 android:name="settings.receiver"
                 android:value="SettingsReceiver" />
