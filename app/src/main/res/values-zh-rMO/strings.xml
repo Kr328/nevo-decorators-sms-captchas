@@ -25,12 +25,8 @@
     <string name="setting_hide_in_launcher_summary">您仍然可以从Nevolution启动本界面</string>
     <string name="setting_pattern_invalid">正则表达式无效</string>
 
-    <string name="permission_tips_content">因 Android 短信权限变动 需要额外操作授予写入权限</string>
-    <string name="permission_tips_cancel">我已了解</string>
-    <string name="permission_tips_help">查看帮助</string>
-
-    <string name="nevolution_invalid_dialog_title">无法找到 Nevolution</string>
-    <string name="nevolution_invalid_dialog_message">此应用依赖于 Nevolution 运行</string>
+    <string name="nevolution_invalid_dialog_title">Nevolution 版本异常</string>
+    <string name="nevolution_invalid_dialog_message">此应用依赖于 Nevolution 3.0+ 运行</string>
     <string name="nevolution_invalid_dialog_button">前往 PlayStore</string>
 
     <string name="setting_source">源代码</string>
