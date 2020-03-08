@@ -15,9 +15,9 @@
         <service
             android:name=".CaptchaDecoratorService"
             android:description="@string/captcha_service_description"
+            android:directBootAware="true"
             android:label="@string/captcha_service_name"
             android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
-            android:directBootAware="true"
             android:process="com.oasisfeng.nevo.decorators">
             <intent-filter android:priority="6">
                 <action android:name="com.oasisfeng.nevo.Decorator" />
@@ -30,25 +30,6 @@
                 android:name="settings.receiver"
                 android:value="SettingsReceiver" />
         </service>
-        <service
-            android:name=".SubscribeDecoratorService"
-            android:description="@string/subscribe_service_description"
-            android:label="@string/subscribe_service_name"
-            android:permission="com.oasisfeng.nevo.permission.BIND_DECORATOR_SERVICE"
-            android:directBootAware="true"
-            android:process="com.oasisfeng.nevo.decorators">
-            <intent-filter android:priority="6">
-                <action android:name="com.oasisfeng.nevo.Decorator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="packages"
-                android:value="com.android.messaging|com.google.android.apps.messaging|com.android.mms|com.sonyericsson.conversations|com.moez.QKSMS" />
-            <meta-data
-                android:name="settings.receiver"
-                android:value="SettingsReceiver" />
-        </service>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/app_name"

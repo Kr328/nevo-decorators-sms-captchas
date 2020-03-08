@@ -7,55 +7,23 @@
     <string name="captcha_service_notification_locked_action_copy_code">Copy Captcha</string>
     <string name="captcha_service_toast_copied_format">%s copied to clipboard</string>
 
-    <string name="subscribe_service_name">Enhanced Subscription SMS</string>
-    <string name="subscribe_service_description">Used to lower the priority of subscription SMS notifications</string>
-    <string name="subscribe_service_notification_channel_name">SMS With Subscription</string>
-
     <string name="setting_captcha">Captcha</string>
     <string name="setting_captcha_hide_on_locked_title">Hide on lockscreen</string>
     <string name="setting_captcha_hide_on_locked_summary">Hide the captcha when the device is locked</string>
     <string name="setting_captcha_override_default_action">Override original button</string>
     <string name="setting_captcha_override_default_action_summary">Overwrite SMS notification original button</string>
     <string name="setting_captcha_use_default_pattern">Use built-in regular</string>
-    <string name="setting_captcha_use_default_pattern_summary">Use built-in regular to identify&amp;parse captchas</string>
-    <string name="setting_captcha_post_copy_action">Post-Copy action</string>
     <string name="setting_captcha_identify_pattern_title">Custom captcha identify regular</string>
     <string name="setting_captcha_identify_pattern_summary">Regular that check if SMS has cpatchas</string>
     <string name="setting_captcha_parse_pattern_title">Custom captcha parse regular</string>
     <string name="setting_captcha_parse_pattern_summary">Parse captchas from the short message</string>
-    <string name="setting_subscribe">Subscription</string>
-    <string name="setting_subscribe_identify_pattern">Subscription identify regular</string>
-    <string name="setting_subscribe_identify_pattern_summary">Regular that identify subscription-type text messages</string>
-    <string name="setting_subscribe_priority">Notification priority</string>
-    <string name="setting_subscribe_priority_summary_v26">Your ROM needs to be configured with priority in the notification settings</string>
-    <string name="setting_other">Other</string>
-    <string name="setting_hide_in_launcher_title">Hide on launcher</string>
-    <string name="setting_hide_in_launcher_summary">You can still launch this interface from Nevolution</string>
     <string name="setting_pattern_invalid">Invalid Regular</string>
 
-    <string name="default_value_identify_subscribe_pattern"></string>
+    <string name="missing_nevolution_dialog_title">Nevolution Missing</string>
+    <string name="missing_nevolution_dialog_message">This app require Nevolution. Please install it first.</string>
+    <string name="missing_nevolution_dialog_button">PlayStore</string>
 
-    <string name="permission_tips_title">Need SMS Write Permission</string>
-    <string name="permission_tips_content">Additional operations are required to grant SMS Write Permission (Not only click grant)</string>
-    <string name="permission_tips_cancel">I already know</string>
-    <string name="permission_tips_help">View help</string>
+    <string name="default_identify_regex" translatable="false"><![CDATA[.*((验证|確認|驗證|校验|动态|确认|随机|激活|兑换|认证|交易|授权|操作|提取|安全|登陆|登录|verification |confirmation )(码|碼|代码|代碼|号码|密码|code|コード)|口令|Steam|快递|快件|单号|订单|包裹).*]]></string>
+    <string name="default_extract_regex" translatable="false"><![CDATA[((?<!\d|(联通|尾号|金额|支付|末四位)(为)?)(G-)?\d{4,8}(?!\d|年|账|动画))|((?<=(code is|码|碼|コードは)[是为為]?[『「【〖（(：: ]?)(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,8}(?![a-zA-Z0-9]))|((?<!\w)\w{4,8}(?!\w)(?= is your))|((?<=(取件码|密码|货码|暗号|凭|号码)[『「【〖（(:：“" ]?)(?<![a-zA-Z0-9-])[a-zA-Z0-9-]{4,10}(?![a-zA-Z0-9-]))|货号[0-9]{1,}|(?<=(到|至|速来|地址)[：: ]?)[\w|-]{3,}?(?=(领取|取件|取货)|[,.)，。）])]]></string>
 
-    <string name="missing_nevolution_dialog_title">Missing Nevolution</string>
-    <string name="missing_nevolution_dialog_message">This app relies on Nevolution. Must install it first.</string>
-    <string name="missing_nevolution_dialog_button">Goto PlayStore</string>
-
-    <string-array name="setting_captcha_post_copy_actions">
-        <item>Do nothing</item>
-        <item>Mark As Read</item>
-        <item>Delete</item>
-    </string-array>
-
-    <string-array name="setting_subscribe_priorities">
-        <item>Urgent</item>
-        <item>High</item>
-        <item>Medium</item>
-        <item>Low</item>
-    </string-array>
-
-    <string name="permission_help_page_url">https://kr328.github.io/nevo-decorators-sms-captchas/obtain_permission</string>
 </resources>

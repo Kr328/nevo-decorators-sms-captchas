@@ -8,7 +8,7 @@
         android:name="me.kr328.nevo.decorators.smscaptcha.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp" />
 
     <View
         android:layout_width="match_parent"

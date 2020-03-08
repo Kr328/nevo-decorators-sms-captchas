@@ -1,17 +1,20 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
+
     defaultConfig {
         applicationId "me.kr328.nevo.decorators.smscaptcha"
         minSdkVersion 24
-        targetSdkVersion 28
-        versionCode 10
-        versionName "1.9"
+        targetSdkVersion 29
+        versionCode 20000
+        versionName "2.0.0"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -22,11 +25,16 @@ android {
 }
 
 dependencies {
-    implementation 'com.oasisfeng.nevo:sdk:1.1.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.oasisfeng.nevo:sdk:2.0.0-rc01'
     implementation 'net.grandcentrix.tray:tray:0.12.0'
-    implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:preference-v7:28.0.0'
-    implementation 'com.android.support:preference-v14:28.0.0'
+    implementation "androidx.core:core-ktx:1.2.0"
+    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+}
+repositories {
+    mavenCentral()
 }
