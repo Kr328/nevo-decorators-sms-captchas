@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.annotation.Keep
 import com.oasisfeng.nevo.sdk.MutableStatusBarNotification
 import me.kr328.nevo.decorators.smscaptcha.compat.NOTIFICATION_PRIORITY_HIGH_COMPAT
-import me.kr328.nevo.decorators.smscaptcha.compat.NOTIFICATION_PRIORITY_LOW_COMPAT
 import me.kr328.nevo.decorators.smscaptcha.compat.priorityCompat
 import me.kr328.nevo.decorators.smscaptcha.utils.CaptchaUtils
 import me.kr328.nevo.decorators.smscaptcha.utils.NotificationUtils.parseMessages
@@ -26,12 +25,10 @@ import java.util.*
 class CaptchaDecoratorService : BaseSmsDecoratorService() {
     private lateinit var mSettings: Settings
     private lateinit var mCaptchaUtils: CaptchaUtils
-    private val mAppliedKeys = TreeSet<String>()
+    private val mAppliedMessages = mutableMapOf<String, List<String>>()
     private val mKeyguardReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val fillBundle = Bundle()
-            fillBundle.putBoolean(NOTIFICATION_EXTRA_RECAST, true)
-            recastAllNotifications(fillBundle)
+            recastAllNotifications()
         }
     }
 
@@ -39,8 +36,7 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
         try {
             val notification = evolving.notification
             val extras = notification.extras
-            val recast = extras.getBoolean(NOTIFICATION_EXTRA_RECAST, false)
-            val messages = parseMessages(notification)
+            val messages = (mAppliedMessages[evolving.key] ?: emptyList()) + parseMessages(notification)
             val captchas = mCaptchaUtils.extractSmsCaptchas(messages, mSettings.isCaptchaUseDefaultPattern)
 
             if (captchas.isEmpty()) return false
@@ -48,10 +44,7 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notification.channelId = NOTIFICATION_CHANNEL_CAPTCHA
             } else {
-                notification.priorityCompat = if (recast)
-                    NOTIFICATION_PRIORITY_LOW_COMPAT
-                else
-                    NOTIFICATION_PRIORITY_HIGH_COMPAT
+                notification.priorityCompat = NOTIFICATION_PRIORITY_HIGH_COMPAT
             }
 
             val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
@@ -64,7 +57,7 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
             notification.flags = notification.flags or Notification.FLAG_ONLY_ALERT_ONCE
             notification.visibility = Notification.VISIBILITY_PUBLIC
             extras.putBoolean(Constants.NOTIFICATION_EXTRA_APPLIED, true)
-            mAppliedKeys.add(evolving.key)
+            mAppliedMessages[evolving.key] = messages
 
             Log.i(Constants.TAG, "Applied " + evolving.key)
 
@@ -92,8 +85,6 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
         val actions = captchas.map {
             createNonIconAction(key, getString(R.string.captcha_service_notification_unlocked_action_copy_code_format, it), CaptchaMessage(messages, it))
         }.toTypedArray()
-
-        //rebuildMessageStyle(notification)
 
         if (mSettings.isCaptchaOverrideDefaultAction)
             replaceActions(notification, actions)
@@ -128,9 +119,9 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
                 compilePattern(mSettings.captchaParsePattern, "", setOf(RegexOption.IGNORE_CASE)))
     }
 
-    private fun recastAllNotifications(fillInExtras: Bundle) {
-        for (key in mAppliedKeys) recastNotification(key, fillInExtras)
-        mAppliedKeys.clear()
+    private fun recastAllNotifications() {
+        for (entry in mAppliedMessages) recastNotification(entry.key, null)
+        mAppliedMessages.clear()
     }
 
     private fun copyCaptcha(captcha: String) {
@@ -164,7 +155,7 @@ class CaptchaDecoratorService : BaseSmsDecoratorService() {
     override fun onNotificationRemoved(key: String, reason: Int): Boolean {
         super.onNotificationRemoved(key, reason)
 
-        mAppliedKeys.remove(key)
+        mAppliedMessages.remove(key)
 
         return false
     }
